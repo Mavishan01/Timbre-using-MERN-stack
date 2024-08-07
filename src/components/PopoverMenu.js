@@ -1,7 +1,9 @@
+// PopoverMenu.js
 import React from "react";
 import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import { Link } from 'react-router-dom';
 
 const categories = {
   Guitars: [
@@ -56,9 +58,16 @@ const PopoverMenu = ({ anchorEl, open, handleClose }) => {
             </Typography>
             <Box sx={{ textAlign: "left" }}>
               {categories[category].map((item) => (
-                <Typography key={item} sx={{ pl: 0 }}>
-                  {item}
-                </Typography>
+                <Link 
+                  to={`/products/${item.toLowerCase().replace(/ /g, '-')}`} 
+                  key={item} 
+                  onClick={handleClose} 
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  <Typography sx={{ pl: 0 }}>
+                    {item}
+                  </Typography>
+                </Link>
               ))}
             </Box>
           </Box>
