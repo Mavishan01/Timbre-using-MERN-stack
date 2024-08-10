@@ -10,3 +10,5 @@ backend
 product view 
 home
 Product List
+user profile
+user odered list
