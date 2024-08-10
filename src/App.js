@@ -11,6 +11,7 @@ import ProductListingPage from './pages/ProductListingPage';
 import Cart from './pages/Cart'; 
 import Wishlist from './pages/Wishlist'; // Import the WishlistPage component
 import { ThemeContextProvider } from './themecontext/ThemeContext';
+import GetInTouch from './pages/GetInTouch';
 
 const App = () => {
   return (
