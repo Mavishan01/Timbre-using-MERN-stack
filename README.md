@@ -12,3 +12,4 @@ home
 Product List
 user profile
 user odered list
+add brand page to footer
