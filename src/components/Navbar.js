@@ -98,7 +98,7 @@ const Navbar = () => {
             inputProps={{ "aria-label": "search" }}
           />
         </Search>
-        <IconButton color="inherit">
+        <IconButton component={Link} to="/cart" color="inherit"> {/* Link to CartPage */}
           <Badge badgeContent={4} color="secondary">
             <ShoppingCartIcon />
           </Badge>

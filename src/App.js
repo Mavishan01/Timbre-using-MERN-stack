@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ContactForm from './pages/GetInTouch';
 import ProductListingPage from './pages/ProductListingPage';
+import Cart from './pages/Cart'; // Import the CartPage component
 import { ThemeContextProvider } from './themecontext/ThemeContext';
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<ContactForm />} />
           <Route path="/products/:productType" element={<ProductListingPage />} />
+          <Route path="/cart" element={<Cart />} /> {/* Add CartPage route */}
         </Routes>
         <Footer />
       </Router>
