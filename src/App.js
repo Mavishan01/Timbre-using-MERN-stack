@@ -8,7 +8,8 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ContactForm from './pages/GetInTouch';
 import ProductListingPage from './pages/ProductListingPage';
-import Cart from './pages/Cart'; // Import the CartPage component
+import Cart from './pages/Cart'; 
+import Wishlist from './pages/Wishlist'; // Import the WishlistPage component
 import { ThemeContextProvider } from './themecontext/ThemeContext';
 
 const App = () => {
@@ -22,7 +23,8 @@ const App = () => {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<ContactForm />} />
           <Route path="/products/:productType" element={<ProductListingPage />} />
-          <Route path="/cart" element={<Cart />} /> {/* Add CartPage route */}
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/wishlist" element={<Wishlist />} /> {/* Add WishlistPage route */}
         </Routes>
         <Footer />
       </Router>

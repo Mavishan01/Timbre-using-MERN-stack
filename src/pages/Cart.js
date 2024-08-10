@@ -1,9 +1,8 @@
-// CartPage.js
 import React, { useState } from 'react';
 import { Box, Typography, Button, Divider, Grid, Paper, IconButton, Checkbox } from '@mui/material';
 import { Add as AddIcon, Remove as RemoveIcon, Delete as DeleteIcon } from '@mui/icons-material';
 
-const CartPage = () => {
+const Cart = () => {
   const initialCartItems = [
     { id: 1, name: 'Acoustic Guitar', quantity: 1, price: 500, imageUrl: 'https://via.placeholder.com/100', selected: true },
     { id: 2, name: 'Electric Guitar', quantity: 2, price: 800, imageUrl: 'https://via.placeholder.com/100', selected: true },
@@ -74,9 +73,19 @@ const CartPage = () => {
                       <Typography variant="body1">{item.name}</Typography>
                       <Typography variant="body1">Price: ${item.price}</Typography>
                     </Grid>
-                    <Grid item xs={12} sm={6} container spacing={1} alignItems="center">
+                    <Grid item xs={12} sm={6} container spacing={1} alignItems="center" justifyContent="flex-end">
                       <Grid item>
-                        <IconButton onClick={() => handleQuantityChange(item.id, -1)} disabled={item.quantity <= 1}>
+                        <IconButton 
+                          onClick={() => handleQuantityChange(item.id, -1)} 
+                          disabled={item.quantity <= 1}
+                          sx={{
+                            border: '1px solid',
+                            borderRadius: '50%',
+                            padding: '5px',
+                            width: '30px',
+                            height: '30px'
+                          }}
+                        >
                           <RemoveIcon />
                         </IconButton>
                       </Grid>
@@ -84,11 +93,20 @@ const CartPage = () => {
                         <Typography variant="body1">{item.quantity}</Typography>
                       </Grid>
                       <Grid item>
-                        <IconButton onClick={() => handleQuantityChange(item.id, 1)}>
+                        <IconButton 
+                          onClick={() => handleQuantityChange(item.id, 1)}
+                          sx={{
+                            border: '1px solid',
+                            borderRadius: '50%',
+                            padding: '5px',
+                            width: '30px',
+                            height: '30px'
+                          }}
+                        >
                           <AddIcon />
                         </IconButton>
                       </Grid>
-                      <Grid item sx={{ ml: 'auto' }}>
+                      <Grid item>
                         <IconButton color="error" onClick={() => handleDelete(item.id)}>
                           <DeleteIcon />
                         </IconButton>
@@ -114,4 +132,4 @@ const CartPage = () => {
   );
 };
 
-export default CartPage;
+export default Cart;

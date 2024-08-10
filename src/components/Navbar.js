@@ -17,7 +17,6 @@ import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import { Link } from 'react-router-dom';
 
-// Styled component for the search container
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -33,7 +32,6 @@ const Search = styled("div")(({ theme }) => ({
   },
 }));
 
-// Styled component for the search icon wrapper
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
   height: "100%",
@@ -44,7 +42,6 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
   justifyContent: "center",
 }));
 
-// Styled component for the input base
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   width: "100%",
@@ -98,12 +95,12 @@ const Navbar = () => {
             inputProps={{ "aria-label": "search" }}
           />
         </Search>
-        <IconButton component={Link} to="/cart" color="inherit"> {/* Link to CartPage */}
+        <IconButton component={Link} to="/cart" color="inherit">
           <Badge badgeContent={4} color="secondary">
             <ShoppingCartIcon />
           </Badge>
         </IconButton>
-        <IconButton color="inherit">
+        <IconButton component={Link} to="/wishlist" color="inherit"> {/* Link to WishlistPage */}
           <FavoriteIcon />
         </IconButton>
         <IconButton color="inherit">
@@ -111,7 +108,6 @@ const Navbar = () => {
         </IconButton>
         <Switch checked={darkMode} onChange={toggleDarkMode} />
 
-        {/* Popover Menu */}
         <PopoverMenu
           anchorEl={anchorEl}
           open={open}
