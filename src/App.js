@@ -25,6 +25,7 @@ const App = () => {
           <Route path="/products/:productType" element={<ProductListingPage />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/wishlist" element={<Wishlist />} /> {/* Add WishlistPage route */}
+          <Route path="/get-in-touch" element={<GetInTouch/>}/>
         </Routes>
         <Footer />
       </Router>
