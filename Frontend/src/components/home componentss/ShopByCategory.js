@@ -2,31 +2,32 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Grid, Card, CardActionArea, CardMedia, CardContent, Typography } from "@mui/material";
 
+
 const categories = [
   {
     label: "GUITARS",
     image: "url_to_guitar_image", // Replace with actual image URL
-    path: "/cart", // Set the correct path
+    path: "/products/:productType", // Set the correct path
   },
   {
     label: "DRUMS AND PERCUSSION",
     image: "url_to_drums_image", // Replace with actual image URL
-    path: "/drums-and-percussion", // Set the correct path
+    path: "/products/:productType",
   },
   {
     label: "VIOLINS",
     image: "url_to_violin_image", // Replace with actual image URL
-    path: "/violins", // Set the correct path
+    path: "/products/:productType", // Set the correct path
   },
   {
     label: "LIVE SOUND & PRO AUDIO",
     image: "url_to_live_sound_image", // Replace with actual image URL
-    path: "/live-sound", // Set the correct path
+    path: "/products/:productType", // Set the correct path
   },
   {
     label: "KEYBOARDS",
     image: "url_to_keyboards_image", // Replace with actual image URL
-    path: "/keyboards", // Set the correct path
+    path: "/products/:productType", // Set the correct path
   },
 ];
 

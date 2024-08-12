@@ -7,6 +7,7 @@ import About from './pages/About';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ContactForm from './pages/GetInTouch';
+import Profile from './pages/Profile';
 import ProductListingPage from './pages/ProductListingPage';
 import Cart from './pages/Cart'; 
 import Wishlist from './pages/Wishlist'; // Import the WishlistPage component
@@ -27,6 +28,7 @@ const App = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/wishlist" element={<Wishlist />} /> {/* Add WishlistPage route */}
           <Route path="/get-in-touch" element={<GetInTouch/>}/>
+          <Route path="/profile" element={<Profile/>}/>
         </Routes>
         <Footer />
       </Router>

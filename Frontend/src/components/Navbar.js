@@ -103,7 +103,7 @@ const Navbar = () => {
         <IconButton component={Link} to="/wishlist" color="inherit"> {/* Link to WishlistPage */}
           <FavoriteIcon />
         </IconButton>
-        <IconButton color="inherit">
+        <IconButton component={Link} to="/profile" color="inherit">
           <AccountCircleIcon />
         </IconButton>
         <Switch checked={darkMode} onChange={toggleDarkMode} />
