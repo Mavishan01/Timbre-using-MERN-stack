@@ -1,0 +1,20 @@
+create server.js
+npm init -y              (package.json)
+to create express app -> npm install express
+
+npm install -g nodemon
+change package.jason as --> "dev": "nodemon server.js"
+
+to install .env -> npm install dotenv
+run the program using -> npm run dev
+
+Check with postman
+
+add routs, controllers, models
+
+create mongo new cluster 
+    set username, password, add team, network
+    update .env   --> add the url and add the password
+
+npm install mongoose
+    
