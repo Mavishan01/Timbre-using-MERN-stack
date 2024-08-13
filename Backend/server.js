@@ -2,9 +2,14 @@
 require("dotenv").config();
 const express = require("express");
 const app = express(); //Express app
-const mogoose = require("mongoose");
+const mongoose = require("mongoose");
 
 // const workoutRouts = require("./routes/workouts");
+const Product = require("./models/product");
+const Category = require("./models/category")
+const Brand = require("./models/brand")
+const model = require("./models/model")
+
 
 
 // Middleware
@@ -21,13 +26,14 @@ app.use((req, res, next) => {
 });
 
 // Connect to database
-mogoose
+mongoose
     .connect(process.env.MONGO_URI)
     .then(() => {
     // Listen for requests
     app.listen(process.env.PORT, () => {
         console.log("Connected to db & listening to port", process.env.PORT);
     });
+
     })
     .catch((error) => {
     console.log(error);
