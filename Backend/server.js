@@ -9,7 +9,11 @@ const Product = require("./models/product");
 const Category = require("./models/category")
 const Brand = require("./models/brand")
 const model = require("./models/model")
-
+const Customer = require("./models/customer")
+const Admin = require("./models/admin")
+const Cart = require("./models/cart")
+const Wishlist = require("./models/wishlist")
+const Order = require("./models/order")
 
 
 // Middleware
