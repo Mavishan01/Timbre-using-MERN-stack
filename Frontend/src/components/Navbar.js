@@ -3,7 +3,7 @@ import React, { useContext, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
+// import MenuIcon from "@mui/icons-material/Menu";
 import Typography from "@mui/material/Typography";
 import Badge from "@mui/material/Badge";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -11,7 +11,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Switch from "@mui/material/Switch";
 import { ThemeContext } from "../themecontext/ThemeContext";
-import PopoverMenu from "./PopoverMenu";
+//import PopoverMenu from "./PopoverMenu";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
@@ -75,16 +75,16 @@ const Navbar = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <IconButton
+        {/* <IconButton
           edge="start"
           color="inherit"
           aria-label="menu"
           onMouseEnter={handlePopoverOpen}
         >
           <MenuIcon />
-        </IconButton>
+        </IconButton> */}
         <Typography variant="h6" component={Link} to="/" sx={{ flexGrow: 1, textDecoration: 'none', color: 'inherit' }}>
-          Logo
+          TIMBRE
         </Typography>
         <Search>
           <SearchIconWrapper>
@@ -108,11 +108,11 @@ const Navbar = () => {
         </IconButton>
         <Switch checked={darkMode} onChange={toggleDarkMode} />
 
-        <PopoverMenu
+        {/* <PopoverMenu
           anchorEl={anchorEl}
           open={open}
           handleClose={handlePopoverClose}
-        />
+        /> */}
       </Toolbar>
     </AppBar>
   );

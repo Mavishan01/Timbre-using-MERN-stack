@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Box, FormControl, InputLabel, MenuItem, Select, Checkbox, FormControlLabel, Typography, TextField } from '@mui/material';
 import AddBrands from './AddBrands';
+import { useNavigate } from 'react-router-dom';
 
 const FilterBox = () => {
-  const [category, setCategory] = useState('');
+  //const [category, setCategory] = useState('');
   const [checkedItems, setCheckedItems] = useState([]);
   const [quantity, setQuantity] = useState([1, 10]);
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   const [brands, setBrands] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
   const [error, setError] = useState(null); // State to store error messages
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBrands = async () => {
@@ -26,11 +30,28 @@ const FilterBox = () => {
       }
     };
 
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("/api/categories");
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+        const json = await response.json();
+        setCategories(json); // Set the fetched categories in state
+      } catch (err) {
+        console.error('Failed to fetch categories:', err);
+        setError(err.message); // Set the error message in state
+      }
+    };
+
     fetchBrands();
+    fetchCategories();
   }, []);
   
   const handleCategoryChange = (event) => {
-    setCategory(event.target.value);
+    const selectedCategory = event.target.value;
+    setSelectedCategory(selectedCategory);
+    navigate(`/products/${selectedCategory.toLowerCase()}`)
   };
 
   const handleCheckboxChange = (event) => {
@@ -59,14 +80,15 @@ const FilterBox = () => {
       <FormControl fullWidth margin="normal">
         <InputLabel>Category</InputLabel>
         <Select
-          value={category}
+          value={selectedCategory}
           onChange={handleCategoryChange}
           label="Category"
         >
-          <MenuItem value="electronics">Electronics</MenuItem>
-          <MenuItem value="fashion">Fashion</MenuItem>
-          <MenuItem value="home">Home</MenuItem>
-          {/* Add more categories as needed */}
+          {categories.map((category) => (
+            <MenuItem key={category._id} value={category.name}>
+              {category.name}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
       <AddBrands/>

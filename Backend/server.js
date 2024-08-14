@@ -17,6 +17,7 @@ const Order = require("./models/order");
 
 // Importing routes
 const brandRoutes = require("./routes/brandRoute");
+const categoryRoutes = require("./routes/categoryRoute")
 
 // Middleware
 // This middleware converts incoming request bodies to JSON
@@ -24,6 +25,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/brands", brandRoutes); // Use brandRoutes for the routes
+app.use("/api/categories", categoryRoutes)
 
 // Logging middleware
 app.use((req, res, next) => {

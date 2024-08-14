@@ -1,15 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, Grid, Card, CardMedia, CardContent, Link } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
-
 // Sample data for categories, best sellers, and new arrivals
-const categories = [
-  { image: 'https://via.placeholder.com/100', name: 'Guitars', link: '/products/guitars' },
-  { image: 'https://via.placeholder.com/100', name: 'Violins', link: '/products/violins' },
-  { image: 'https://via.placeholder.com/100', name: 'Drums', link: '/products/drums' },
-  { image: 'https://via.placeholder.com/100', name: 'Keyboards', link: '/products/keyboards' },
-  { image: 'https://via.placeholder.com/100', name: 'Accessories', link: '/products/accessories' },
-];
 
 const bestSellers = [
   { image: 'https://via.placeholder.com/150', title: 'Guitar 1', price: '$100', link: '/products/guitar-1' },
@@ -33,6 +25,25 @@ const newArrivals = [
 ];
 
 const Home = () => {
+  const [categories,setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try{
+        const response = await fetch('/api/categories');
+        if(!response.ok){
+          throw new Error('Failed to fetch categories');
+        }
+        const data = await response.json();
+        setCategories(data);
+      }catch (error) {
+        console.error(error.message);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   return (
     <Box sx={{ padding: 2 }}>
       {/* Banner Section */}
@@ -50,15 +61,24 @@ const Home = () => {
       <Typography variant="h4" component="h2" gutterBottom>
         Shop by Category
       </Typography>
-      <Box sx={{ display: 'flex', justifyContent: 'space-around', mb: 4 }}>
+      <Box 
+        sx = {{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
+          gap: 12,
+          justifyItems: 'center',
+          mb: 4,
+        }}
+      >
         {categories.map((category) => (
-          <Box key={category.name} sx={{ textAlign: 'center' }}>
-            <Link href={category.link} sx={{ display: 'block', mb: 1 }}>
-              <img src={category.image} alt={category.name} style={{ borderRadius: '50%', width: 100, height: 100 }} />
+          <Box key={category._id} sx={{textAlign: 'center'}}>
+            <Link component={RouterLink} to ={`/products/${category.name.toLowerCase()}`} sx={{display: 'block', mb: 1}}>
+              <img src={category.image || 'https://via.placeholder.com/100'} alt={category.name} style={{ borderRadius: '50%', width: 160, height: 160 }} />
             </Link>
             <Typography variant="body1">{category.name}</Typography>
           </Box>
         ))}
+       
       </Box>
 
       {/* Best Sellers Section */}
