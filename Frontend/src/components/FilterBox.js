@@ -1,13 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, FormControl, InputLabel, MenuItem, Select, Checkbox, FormControlLabel, Typography, TextField } from '@mui/material';
+import AddBrands from './AddBrands';
 
 const FilterBox = () => {
   const [category, setCategory] = useState('');
-  const [checkedItems, setCheckedItems] = useState([]); // Remove this if unused
+  const [checkedItems, setCheckedItems] = useState([]);
   const [quantity, setQuantity] = useState([1, 10]);
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
+  const [brands, setBrands] = useState([]);
+  const [error, setError] = useState(null); // State to store error messages
 
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const response = await fetch("/api/brands");
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+        const json = await response.json();
+        setBrands(json); // Set the fetched brands in state
+      } catch (err) {
+        console.error('Failed to fetch brands:', err);
+        setError(err.message); // Set the error message in state
+      }
+    };
+
+    fetchBrands();
+  }, []);
+  
   const handleCategoryChange = (event) => {
     setCategory(event.target.value);
   };
@@ -48,18 +69,22 @@ const FilterBox = () => {
           {/* Add more categories as needed */}
         </Select>
       </FormControl>
+      <AddBrands/>
 
       <FormControl component="fieldset" margin="normal">
         <Typography variant="subtitle1">Brands</Typography>
-        <FormControlLabel
-          control={<Checkbox value="brandA" onChange={handleCheckboxChange} />}
-          label="Brand A"
-        />
-        <FormControlLabel
-          control={<Checkbox value="brandB" onChange={handleCheckboxChange} />}
-          label="Brand B"
-        />
-        {/* Add more brands as needed */}
+        {brands && brands.map((brand) => (
+          <FormControlLabel
+            key={brand._id} // Assuming each brand has a unique _id
+            control={
+              <Checkbox 
+                value={brand.name} // Assuming each brand has a 'name' field
+                onChange={handleCheckboxChange}
+              />
+            }
+            label={brand.name}
+          />
+        ))}
       </FormControl>
 
       <Typography variant="subtitle1" gutterBottom>Price Range</Typography>
