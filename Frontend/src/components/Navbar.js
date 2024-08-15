@@ -16,6 +16,8 @@ import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import { Link } from 'react-router-dom';
+import Button from "@mui/material/Button";
+import LoginPopup from "./LoginPopup";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -61,13 +63,22 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Navbar = () => {
   const { darkMode, toggleDarkMode } = useContext(ThemeContext);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [loginOpen, setLoginOpen] = useState(false);
 
-  const handlePopoverOpen = (event) => {
-    setAnchorEl(event.currentTarget);
+  // const handlePopoverOpen = (event) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
+
+  // const handlePopoverClose = () => {
+  //   setAnchorEl(null);
+  // };
+
+  const handleLoginClick = () => {
+    setLoginOpen(true);
   };
 
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
+  const handleLoginClose = () => {
+    setLoginOpen(false);
   };
 
   const open = Boolean(anchorEl);
@@ -95,6 +106,13 @@ const Navbar = () => {
             inputProps={{ "aria-label": "search" }}
           />
         </Search>
+        <Button 
+          color="inherit" 
+          sx={{ ml: 2, px: 2, py: 1 }} 
+          onClick={handleLoginClick}
+        >
+          Login
+        </Button>
         <IconButton component={Link} to="/cart" color="inherit">
           <Badge badgeContent={4} color="secondary">
             <ShoppingCartIcon />
@@ -114,6 +132,7 @@ const Navbar = () => {
           handleClose={handlePopoverClose}
         /> */}
       </Toolbar>
+      <LoginPopup open={loginOpen} handleClose={handleLoginClose} />
     </AppBar>
   );
 };
