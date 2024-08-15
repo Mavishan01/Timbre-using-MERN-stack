@@ -1,29 +1,33 @@
-// This code sets up a web server using Express and connects it to a MongoDB database. It defines routes for handling workout-related requests and logs every request to the console.
 require("dotenv").config();
 const express = require("express");
-const app = express(); //Express app
 const mongoose = require("mongoose");
 
-// const workoutRouts = require("./routes/workouts");
-const Product = require("./models/product");
-const Category = require("./models/category")
-const Brand = require("./models/brand")
-const model = require("./models/model")
-const Customer = require("./models/customer")
-const Admin = require("./models/admin")
-const Cart = require("./models/cart")
-const Wishlist = require("./models/wishlist")
-const Order = require("./models/order")
+const app = express(); // Express app
 
+// Importing models
+const Product = require("./models/product");
+const Category = require("./models/category");
+const Brand = require("./models/brand");
+const Model = require("./models/model");
+const Customer = require("./models/customer");
+const Admin = require("./models/admin");
+const Cart = require("./models/cart");
+const Wishlist = require("./models/wishlist");
+const Order = require("./models/order");
+
+// Importing routes
+const brandRoutes = require("./routes/brandRoute");
+const categoryRoutes = require("./routes/categoryRoute")
 
 // Middleware
-//  This middleware converts incoming request bodies to JSON
+// This middleware converts incoming request bodies to JSON
 app.use(express.json());
 
 // Routes
-// app.use("/api/workouts", workoutRouts);
+app.use("/api/brands", brandRoutes); // Use brandRoutes for the routes
+app.use("/api/categories", categoryRoutes)
 
-
+// Logging middleware
 app.use((req, res, next) => {
     console.log(req.path, req.method);
     next();
@@ -31,17 +35,14 @@ app.use((req, res, next) => {
 
 // Connect to database
 mongoose
-    .connect(process.env.MONGO_URI)
+    .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
-    // Listen for requests
-    app.listen(process.env.PORT, () => {
-        console.log("Connected to db & listening to port", process.env.PORT);
-    });
-
+        // Listen for requests
+        app.listen(process.env.PORT, () => {
+            console.log("Connected to db & listening to port", process.env.PORT);
+        });
     })
     .catch((error) => {
-    console.log(error);
+        console.log(error);
     });
-
-
 

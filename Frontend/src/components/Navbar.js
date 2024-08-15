@@ -3,7 +3,7 @@ import React, { useContext, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
+// import MenuIcon from "@mui/icons-material/Menu";
 import Typography from "@mui/material/Typography";
 import Badge from "@mui/material/Badge";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -11,11 +11,13 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Switch from "@mui/material/Switch";
 import { ThemeContext } from "../themecontext/ThemeContext";
-import PopoverMenu from "./PopoverMenu";
+//import PopoverMenu from "./PopoverMenu";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import { Link } from 'react-router-dom';
+import Button from "@mui/material/Button";
+import LoginPopup from "./LoginPopup";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -61,13 +63,22 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Navbar = () => {
   const { darkMode, toggleDarkMode } = useContext(ThemeContext);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [loginOpen, setLoginOpen] = useState(false);
 
-  const handlePopoverOpen = (event) => {
-    setAnchorEl(event.currentTarget);
+  // const handlePopoverOpen = (event) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
+
+  // const handlePopoverClose = () => {
+  //   setAnchorEl(null);
+  // };
+
+  const handleLoginClick = () => {
+    setLoginOpen(true);
   };
 
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
+  const handleLoginClose = () => {
+    setLoginOpen(false);
   };
 
   const open = Boolean(anchorEl);
@@ -75,16 +86,16 @@ const Navbar = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <IconButton
+        {/* <IconButton
           edge="start"
           color="inherit"
           aria-label="menu"
           onMouseEnter={handlePopoverOpen}
         >
           <MenuIcon />
-        </IconButton>
+        </IconButton> */}
         <Typography variant="h6" component={Link} to="/" sx={{ flexGrow: 1, textDecoration: 'none', color: 'inherit' }}>
-          Logo
+          TIMBRE
         </Typography>
         <Search>
           <SearchIconWrapper>
@@ -95,6 +106,13 @@ const Navbar = () => {
             inputProps={{ "aria-label": "search" }}
           />
         </Search>
+        <Button 
+          color="inherit" 
+          sx={{ ml: 2, px: 2, py: 1 }} 
+          onClick={handleLoginClick}
+        >
+          Login
+        </Button>
         <IconButton component={Link} to="/cart" color="inherit">
           <Badge badgeContent={4} color="secondary">
             <ShoppingCartIcon />
@@ -108,12 +126,13 @@ const Navbar = () => {
         </IconButton>
         <Switch checked={darkMode} onChange={toggleDarkMode} />
 
-        <PopoverMenu
+        {/* <PopoverMenu
           anchorEl={anchorEl}
           open={open}
           handleClose={handlePopoverClose}
-        />
+        /> */}
       </Toolbar>
+      <LoginPopup open={loginOpen} handleClose={handleLoginClose} />
     </AppBar>
   );
 };
