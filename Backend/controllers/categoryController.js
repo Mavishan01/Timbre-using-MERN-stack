@@ -12,11 +12,11 @@ const getCategories = async (req, res) => {
 
 // Create a Category
 const createCategory = async (req, res) => {
-    const { name } = req.body;
+    const { name,image } = req.body;
 
     // add doc to db
     try {
-      const category = await Category.create({ name });
+      const category = await Category.create({ name, image });
       res.status(200).json(category);
     } catch (error) {
       res.status(400).json({ error: error.message });

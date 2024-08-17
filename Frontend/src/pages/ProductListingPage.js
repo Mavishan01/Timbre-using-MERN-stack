@@ -15,6 +15,7 @@ const ProductListingPage = () => {
         const response = await fetch(`/api/products?category=${productType}`);
         if (!response.ok) {
           throw new Error('Failed to fetch products');
+
         }
         const data = await response.json();
         setProducts(data);
@@ -22,7 +23,25 @@ const ProductListingPage = () => {
         console.error(error.message);
       }
     };
+    
+    // const obj = {
+    //   "email":"ddd",
+    //   "password":"123"
+    // }
 
+    // fetch(`/api/products?category=${productType}`,{
+    //   method:"POST",
+    //   body:JSON.stringify(obj),
+    //   headers:"application/json"
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     setProducts(data)
+    //   })
+    //   .catch((err) => {
+    //     console.log(err)
+    //   })
+    
     fetchProducts();
   }, [productType]);
 

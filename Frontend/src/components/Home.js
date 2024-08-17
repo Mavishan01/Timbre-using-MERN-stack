@@ -78,7 +78,7 @@ const Home = () => {
             <Typography variant="body1">{category.name}</Typography>
           </Box>
         ))}
-       
+      
       </Box>
 
       {/* Best Sellers Section */}

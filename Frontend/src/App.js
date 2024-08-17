@@ -8,6 +8,7 @@ import Footer from './components/Footer';
 import ContactForm from './pages/GetInTouch';
 import Profile from './pages/Profile';
 import ProductListingPage from './pages/ProductListingPage';
+<<<<<<< Updated upstream
 import Cart from './pages/Cart'; 
 import Wishlist from './pages/Wishlist';
 import { ThemeContextProvider } from './themecontext/ThemeContext';
@@ -21,11 +22,29 @@ const App = () => {
         <CssBaseline />
         <Router>
           <ConditionalNavbar />
+=======
+import Cart from './pages/Cart';
+import Wishlist from './pages/Wishlist'; 
+import AdminDashboard from './pages/AdminDashboard'; 
+import { ThemeContextProvider } from './themecontext/ThemeContext';
+import { AuthProvider } from './contexts/AuthContext'; 
+import AuthRoute from './components/AuthRoute'; // Import AuthRoute
+import AdminRoute from './components/AdminRoute'; // Import AdminRoute
+
+const App = () => {
+  return (
+    <ThemeContextProvider>
+      <AuthProvider>
+        <CssBaseline />
+        <Router>
+          <Navbar />
+>>>>>>> Stashed changes
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<ContactForm />} />
             <Route path="/products/:productType" element={<ProductListingPage />} />
+<<<<<<< Updated upstream
             <Route path="/cart" element={<Cart />} />
             <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/get-in-touch" element={<GetInTouch/>}/>
@@ -35,6 +54,33 @@ const App = () => {
         </Router>
       </ThemeContextProvider>
     </AuthContextProvider>
+=======
+            
+            {/* Protected Routes */}
+            <Route 
+              path="/cart" 
+              element={<AuthRoute component={Cart} />} 
+            />
+            <Route 
+              path="/wishlist" 
+              element={<AuthRoute component={Wishlist} />} 
+            />
+            <Route 
+              path="/profile" 
+              element={<AuthRoute component={Profile} />} 
+            />
+
+            {/* Admin Dashboard */}
+            <Route 
+              path="/admin/dashboard" 
+              element={<AdminRoute component={AdminDashboard} />} 
+            />
+          </Routes>
+          <Footer />
+        </Router>
+      </AuthProvider>
+    </ThemeContextProvider>
+>>>>>>> Stashed changes
   );
 };
 

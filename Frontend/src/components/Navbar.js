@@ -62,7 +62,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Navbar = () => {
   const { darkMode, toggleDarkMode } = useContext(ThemeContext);
-  const [anchorEl, setAnchorEl] = useState(null);
+  // const [anchorEl, setAnchorEl] = useState(null);
   const [loginOpen, setLoginOpen] = useState(false);
 
   // const handlePopoverOpen = (event) => {
@@ -81,7 +81,7 @@ const Navbar = () => {
     setLoginOpen(false);
   };
 
-  const open = Boolean(anchorEl);
+  // const open = Boolean(anchorEl);
 
   return (
     <AppBar position="static">
