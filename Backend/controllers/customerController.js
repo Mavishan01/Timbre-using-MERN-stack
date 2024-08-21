@@ -7,6 +7,26 @@ const getCustomers = async (req, res) => {
   res.status(200).json(customers);
 };
 
+// Get one customer
+const getCustomerDetails = async (req, res) => {
+  const { id } = req.params;
+  try{
+    const customer = await Customer.findById(id);
+    if(!customer)
+    {
+      return res.status(400).json({ error: "Customer not found" });
+    }
+    else
+    {
+      res.json(customer);
+    }
+  }
+  catch(err)
+  {
+    res.status(400).json({ error: err.message });
+  }
+}
+
 // Create a Customer (Sign Up)
 const createCustomer = async (req, res) => {
   const { first_name, last_name, email, password, address, mobile } = req.body;
@@ -54,4 +74,5 @@ module.exports = {
   getCustomers,
   createCustomer,
   loginCustomer,
+  getCustomerDetails,
 };

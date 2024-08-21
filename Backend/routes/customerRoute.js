@@ -3,11 +3,15 @@ const router = express.Router();
 const { 
     getCustomers, 
     createCustomer, 
-    loginCustomer 
+    loginCustomer ,
+    getCustomerDetails,
 } = require("../controllers/customerController");
 
 // Get all customers
 router.get("/", getCustomers);
+
+// Get customer using an ID
+router.get("/:id", getCustomerDetails);
 
 // POST a new customer (Sign Up)
 // router.post("/signup", createCustomer);

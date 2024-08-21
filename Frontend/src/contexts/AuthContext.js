@@ -18,6 +18,8 @@ export const AuthProvider = ({ children }) => {
         console.error("Token decoding error:", error);
         localStorage.removeItem('token'); // Remove invalid token
       }
+    }else{
+      console.log("No token")
     }
   }, []);
 
@@ -25,9 +27,11 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post(`/api/auth/${isAdmin ? 'admin-login' : 'login'}`, { email, password });
       const token = response.data.token;
-      localStorage.setItem('token', token);
-      const decodedToken = jwtDecode(token);
-      setUser(decodedToken);
+      if (token) {
+        localStorage.setItem('token', token);
+        const decodedToken = jwtDecode(token);
+        setUser(decodedToken);
+      }
     } catch (error) {
       console.error("Authentication error:", error.response?.data || error.message);
       throw error;

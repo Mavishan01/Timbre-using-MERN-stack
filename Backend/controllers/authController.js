@@ -3,32 +3,6 @@ const jwt = require("jsonwebtoken");
 const Customer = require("../models/customer");
 const Admin = require("../models/admin");
 
-// Customer login
-// const loginUser = async (req, res) => {
-//     const { email, password } = req.body;
-
-//     try {
-//         const customer = await Customer.findOne({ email });
-
-//         if (!customer) return res.status(400).json({ message: "Invalid credentials hhj" });
-//         console.log(customer)
-
-//         const isMatch = await bcrypt.compare(password, customer.password);
-//         if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
-
-//         const token = jwt.sign({ id: customer._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-
-//         res.cookie("token", token, {
-//             httpOnly: false,
-//             withCredentials: true
-//         })
-
-//         res.json({ customer, message: "Customer Login Success", status: true });
-//     } catch (err) {
-//         res.status(500).json({ message: "Server error", statu: false });
-//     }
-// };
-
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
@@ -47,72 +21,45 @@ const loginUser = async (req, res) => {
         if (!isMatch) return res.status(400).json({ message: "Invalid password credentials" });
 
         const token = jwt.sign({ id: customer._id, type: "Customer" }, process.env.JWT_SECRET, { expiresIn: "1h" });
-
-        res.cookie("token", token, {
-            httpOnly: false,
-            withCredentials: true,
-            type: "Customer"
-        });
-        
-
-    
-        res.json({ customer, message: "Customer Login Success", status: true });
+        res.json({ customer, token , message: "Customer Login Success", status: true });
     } catch (err) {
         console.error("Error during login:", err);
         res.status(500).json({ message: "Server error" });
     }
 };
 
-
-
-
-// Customer signup
-// const signupUser = async (req, res) => {
-//     const { fname, lname, mobile, email, address, password } = req.body;
-
-//     try {
-//         const existingUser = await Customer.findOne({ email });
-//         console.log(existingUser)
-//         if (existingUser) return res.status(400).json({ message: "User already exists" });
-
-//         const hashedPassword = await bcrypt.hash(password, 12);
-//         const newCustomer = new Customer({ first_name: fname, last_name: lname, mobile: mobile, address: address, email, password: hashedPassword });
-
-//         await newCustomer.save();
-//         const token = jwt.sign({ id: newCustomer._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-
-//         res.cookie("token", token, {
-//             httpOnly: false,
-//             withCredentials: true
-//         })
-
-//         res.status(201).json({ customer: newCustomer, message: "Customer Signup Success", status: true });
-//     } catch (err) {
-//         res.status(500).json({ message: "Server error" });
-//     }
-// };
-
 const signupUser = async (req, res) => {
     const { fname, lname, mobile, email, address, password } = req.body;
 
+    console.log("Received data:", { fname, lname, mobile, email, address, password });
     try {
+        // Check if the user already exists
         const existingUser = await Customer.findOne({ email });
         if (existingUser) return res.status(400).json({ message: "User already exists" });
 
+        // Hash the password
         const hashedPassword = await bcrypt.hash(password, 12);
-        
-        const newCustomer = new Customer({ 
-            first_name: fname, 
-            last_name: lname, 
-            mobile: mobile, 
-            address: address, 
-            email: email, 
-            password: hashedPassword 
+
+        // Create a new customer
+        const newCustomer = new Customer({
+            first_name: fname,
+            last_name: lname,
+            mobile: mobile,
+            address: address,
+            email: email,
+            password: hashedPassword
         });
 
+        // Save the new customer to the database
         await newCustomer.save();
-        res.status(201).json({ customer: newCustomer, message: "Customer Signup Success", status: true });
+
+        // Generate a JWT token
+        const token = jwt.sign({ id: newCustomer._id, email: newCustomer.email, type: 'Customer' }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        // Return the customer data and token
+        res.status(201).json({ customer: newCustomer, token, message: "Customer Signup Success", status: true });
     } catch (err) {
+        console.error("Signup error:", err); // Log any error that occurs
         res.status(500).json({ message: "Server error" });
     }
 };
@@ -129,12 +76,8 @@ const loginAdmin = async (req, res) => {
         if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
         const token = jwt.sign({ id: admin._id, type: "Admin" }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        res.cookie("token", token, {
-            httpOnly: false,
-            withCredentials: true,
-            type: "Admin"
-        })
-        res.json({ admin, message: "Admin Login Success", status: true });
+        
+        res.json({ admin, token, message: "Admin Login Success", status: true });
     } catch (err) {
         res.status(500).json({ message: "Server error" });
     }

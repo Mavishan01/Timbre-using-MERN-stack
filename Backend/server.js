@@ -37,7 +37,7 @@ app.use("/api/brands", brandRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/customers", customerRoutes);
 app.use("/api/auth", authRoutes); // Add the auth routes for handling login, signup, and admin login
-app.use("/api/", middlewareRoutes);
+app.use("/api", middlewareRoutes);
 
 // Connect to database
 mongoose

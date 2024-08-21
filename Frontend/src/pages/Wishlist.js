@@ -1,13 +1,27 @@
 // WishlistPage.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Typography, Button, Divider, Grid, Paper, IconButton } from '@mui/material';
 import { AddShoppingCart as AddShoppingCartIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const WishlistPage = () => {
+  const navigate = useNavigate();
+
   const initialWishlistItems = [
     { id: 1, name: 'Classical Guitar', price: 600, imageUrl: 'https://via.placeholder.com/100' },
     { id: 2, name: 'Bass Guitar', price: 900, imageUrl: 'https://via.placeholder.com/100' },
   ];
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      //
+    }
+    else {
+      console.error("No token found, redirecting to login.");
+      navigate("/");
+    }
+  }, []);
 
   const [wishlistItems, setWishlistItems] = useState(initialWishlistItems);
 

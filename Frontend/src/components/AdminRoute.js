@@ -5,8 +5,11 @@ import { AuthContext } from '../contexts/AuthContext';
 
 const AdminRoute = ({ component: Component }) => {
   const { user } = useContext(AuthContext);
+  console.log("AdminRoute - User:", user); // Add this line to debug
 
   return user?.type === 'Admin' ? <Component /> : <Navigate to="/login" replace />;
 };
 
+
 export default AdminRoute;
+
