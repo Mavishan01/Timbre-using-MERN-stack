@@ -1,8 +1,9 @@
 import React from 'react';
-import { Box, Typography, List, ListItem, ListItemText, Divider, CssBaseline } from '@mui/material';
+import { Box, Typography, List, ListItem, ListItemText, Divider, CssBaseline, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-
+import LogoutIcon from "@mui/icons-material/Logout";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const Sidebar = styled('div')(({ theme }) => ({
   width: 240,
@@ -12,6 +13,11 @@ const Sidebar = styled('div')(({ theme }) => ({
 }));
 
 const AdminPage = () => {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate("/");
+  };
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -45,6 +51,17 @@ const AdminPage = () => {
             <ListItemText primary="Settings" />
           </ListItem>
         </List>
+
+        <Box sx={{ flexGrow: 1 }} />
+
+        <Button
+              startIcon={<LogoutIcon />}
+              // variant="outlined"
+              color="error"
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
         <Divider />
       </Sidebar>
       <Box

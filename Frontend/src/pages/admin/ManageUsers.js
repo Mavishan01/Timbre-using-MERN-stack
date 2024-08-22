@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@mui/material';
 import { ToggleOff, ToggleOn } from '@mui/icons-material';
-
+import AdminDashboard from '../AdminDashboard';
 const ManageUsers = () => {
   const [users, setUsers] = useState([
     // Example users
@@ -18,7 +18,10 @@ const ManageUsers = () => {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ display: 'flex' }}>
+      <AdminDashboard />
+      <Box sx={{ flexGrow: 1, padding: 2 }}>
+
       <Typography variant="h4" gutterBottom>
         Manage Users
       </Typography>
@@ -56,6 +59,7 @@ const ManageUsers = () => {
             </TableBody>
           </Table>
         </TableContainer>
+      </Box>
       </Box>
     </Box>
   );

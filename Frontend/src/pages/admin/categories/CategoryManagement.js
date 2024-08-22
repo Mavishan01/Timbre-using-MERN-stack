@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Typography, Button, TextField, List, ListItem, ListItemText, IconButton } from '@mui/material';
 import { Add, Edit, Delete } from '@mui/icons-material';
+import AdminDashboard from '../../AdminDashboard';
 
 const CategoryManagement = () => {
   const [categories, setCategories] = useState([]);
@@ -30,7 +31,9 @@ const CategoryManagement = () => {
   };
 
   return (
-    <Box>
+    <Box sx={{ display: 'flex' }}>
+      <AdminDashboard />
+      <Box sx={{ flexGrow: 1, padding: 2 }}>
       <Typography variant="h4" gutterBottom>
         Manage Categories
       </Typography>
@@ -59,6 +62,7 @@ const CategoryManagement = () => {
           </ListItem>
         ))}
       </List>
+      </Box>
     </Box>
   );
 };
