@@ -70,9 +70,41 @@ const loginCustomer = async (req, res) => {
   }
 };
 
+const updateCustomer = async (req, res) => {
+  const customerID = req.params.id;
+  const updateData = req.body;
+
+  try{
+    const updatedCustomer = await Customer.findByIdAndUpdate(
+      customerID,
+      updateData,
+      {new: true}
+    );
+
+    if(!updateCustomer)
+    {
+      console.log("Customer cannot found")
+      return res.status(400).json({message: 'Customer cannot found'})
+    }
+    console.log("Customer updated successfully")
+
+    res.status(200).json({
+      message: 'Customer updated successfully',
+      customer: updatedCustomer
+    });
+
+  }
+  catch{
+    console.error('Error updating customer:', error);
+    res.status(400).json({ message: 'Server error', error });
+  }
+
+}
+
 module.exports = {
   getCustomers,
   createCustomer,
   loginCustomer,
   getCustomerDetails,
+  updateCustomer,
 };

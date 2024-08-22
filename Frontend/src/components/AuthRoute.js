@@ -6,7 +6,7 @@ import { AuthContext } from '../contexts/AuthContext';
 const AuthRoute = ({ component: Component }) => {
   const { user } = useContext(AuthContext);
 
-  return user ? <Component /> : <Navigate to="/login" replace />;
+  return user ? <Component /> : <Navigate to="/" replace />;
 };
 
 export default AuthRoute;

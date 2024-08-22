@@ -15,7 +15,7 @@ import { ThemeContext } from "../themecontext/ThemeContext";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Button from "@mui/material/Button";
 import LoginPopup from "./LoginPopup";
 
@@ -61,6 +61,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const Navbar = () => {
+  // const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+  
+
   const { darkMode, toggleDarkMode } = useContext(ThemeContext);
   // const [anchorEl, setAnchorEl] = useState(null);
   const [loginOpen, setLoginOpen] = useState(false);
@@ -82,9 +87,45 @@ const Navbar = () => {
   };
 
   // const open = Boolean(anchorEl);
+  const handleCartClick = () => {
+    if(!token)
+    {
+      alert("Please login or sign up first!")
+      return;
+    }
+    else
+    {
+      navigate("/cart")
+    }
+  }
+
+  const handleFavoriteClick = () => {
+    if(!token)
+    {
+      alert("Please login or sign up first!")
+      return;
+    }
+    else
+    {
+      navigate("/wishlist")
+    }
+  }
+
+  const handleProfileClick = () => {
+    if(!token)
+    {
+      alert("Please login or sign up first!")
+      return;
+    }
+    else
+    {
+      navigate("/profile")
+    }
+  }
+  
 
   return (
-    <AppBar position="static">
+    <AppBar position="fixed">
       <Toolbar>
         {/* <IconButton
           edge="start"
@@ -115,14 +156,14 @@ const Navbar = () => {
         </Button>
         <IconButton component={Link} to="/cart" color="inherit">
           <Badge badgeContent={4} color="secondary">
-            <ShoppingCartIcon />
+            <ShoppingCartIcon onClick={handleCartClick} />
           </Badge>
         </IconButton>
         <IconButton component={Link} to="/wishlist" color="inherit"> {/* Link to WishlistPage */}
-          <FavoriteIcon />
+          <FavoriteIcon onClick={handleFavoriteClick} />
         </IconButton>
         <IconButton component={Link} to="/profile" color="inherit">
-          <AccountCircleIcon />
+          <AccountCircleIcon onClick={handleProfileClick} />
         </IconButton>
         <Switch checked={darkMode} onChange={toggleDarkMode} />
 

@@ -7,7 +7,7 @@ const AdminRoute = ({ component: Component }) => {
   const { user } = useContext(AuthContext);
   console.log("AdminRoute - User:", user); // Add this line to debug
 
-  return user?.type === 'Admin' ? <Component /> : <Navigate to="/login" replace />;
+  return user?.type === 'Admin' ? <Component /> : <Navigate to="/" replace />;
 };
 
 
