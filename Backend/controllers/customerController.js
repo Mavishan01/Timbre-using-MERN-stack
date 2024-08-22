@@ -94,7 +94,7 @@ const updateCustomer = async (req, res) => {
     });
 
   }
-  catch{
+  catch(error){
     console.error('Error updating customer:', error);
     res.status(400).json({ message: 'Server error', error });
   }

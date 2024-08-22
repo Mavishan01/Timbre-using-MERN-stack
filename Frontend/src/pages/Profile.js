@@ -48,7 +48,7 @@ const Profile = () => {
 
   const fetchCustomerDetails = async (customerId) => {
     try {
-      const response = await fetch(`/api/customers/${customerId}`);      
+      const response = await fetch(`/api/customers/${customerId}`);
       if (!response.ok) {
         throw new Error(`Failed to load customer details: ${response.statusText}`);
       }
@@ -74,10 +74,34 @@ const Profile = () => {
     setEditMode(false);
   };
 
-  const handleSave = () => {
-    // Handle save logic here, e.g., API call to update profile
-    setEditMode(false);
-    alert("Profile updated successfully!");
+  const handleSave = async (customerId) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (token) {
+
+        const decodedToken = jwtDecode(token);
+        const customerId = decodedToken.id;
+
+        const response = await fetch(`/api/customers/update/${customerId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(profile),
+        });
+
+        if (response.ok) {
+          alert("Profile updated successfully!");
+          setEditMode(false);
+        } else {
+          throw new Error("Failed to update profile.");
+        }
+      }   
+    }
+    catch (error) {
+      console.error("Error updating profile:", error);
+      alert("Error updating profile. Please try again.");
+    }
   };
 
   const handleLogout = () => {
@@ -129,7 +153,7 @@ const Profile = () => {
           <TextField
             fullWidth
             label="First Name"
-            name="firstName"
+            name="first_name"
             value={profile.first_name}
             onChange={handleChange}
             disabled={!editMode}
@@ -141,7 +165,7 @@ const Profile = () => {
           <TextField
             fullWidth
             label="Last Name"
-            name="lastName"
+            name="last_name"
             value={profile.last_name}
             onChange={handleChange}
             disabled={!editMode}
