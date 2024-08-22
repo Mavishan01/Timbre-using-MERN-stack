@@ -1,14 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Typography, Button, Divider, Grid, Paper, IconButton, Checkbox } from '@mui/material';
 import { Add as AddIcon, Remove as RemoveIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const Cart = () => {
+  const navigate = useNavigate();
+
   const initialCartItems = [
     { id: 1, name: 'Acoustic Guitar', quantity: 1, price: 500, imageUrl: 'https://via.placeholder.com/100', selected: true },
     { id: 2, name: 'Electric Guitar', quantity: 2, price: 800, imageUrl: 'https://via.placeholder.com/100', selected: true },
   ];
 
   const [cartItems, setCartItems] = useState(initialCartItems);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      //
+    }
+    else {
+      
+      console.error("No token found, redirecting to login.");
+      navigate("/");
+    }
+  }, []);
 
   const handleQuantityChange = (id, increment) => {
     setCartItems(prevItems =>

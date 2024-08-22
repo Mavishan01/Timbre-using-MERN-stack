@@ -14,18 +14,17 @@ const Admin = require("./models/admin");
 const Cart = require("./models/cart");
 const Wishlist = require("./models/wishlist");
 const Order = require("./models/order");
+// const Auth = require("./models/user")
 
 // Importing routes
 const brandRoutes = require("./routes/brandRoute");
-const categoryRoutes = require("./routes/categoryRoute")
+const categoryRoutes = require("./routes/categoryRoute");
+const customerRoutes = require("./routes/customerRoute");
+const authRoutes = require("./routes/authRoute"); // Add auth routes
+const middlewareRoutes = require("./routes/middlewearRoute");
 
 // Middleware
-// This middleware converts incoming request bodies to JSON
-app.use(express.json());
-
-// Routes
-app.use("/api/brands", brandRoutes); // Use brandRoutes for the routes
-app.use("/api/categories", categoryRoutes)
+app.use(express.json()); // Converts incoming request bodies to JSON
 
 // Logging middleware
 app.use((req, res, next) => {
@@ -33,16 +32,22 @@ app.use((req, res, next) => {
     next();
 });
 
+// Routes
+app.use("/api/brands", brandRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/customers", customerRoutes);
+app.use("/api/auth", authRoutes); // Add the auth routes for handling login, signup, and admin login
+app.use("/api", middlewareRoutes);
+
 // Connect to database
 mongoose
-    .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .connect(process.env.MONGO_URI)
     .then(() => {
         // Listen for requests
         app.listen(process.env.PORT, () => {
-            console.log("Connected to db & listening to port", process.env.PORT);
+            console.log("Connected to db & listening on port", process.env.PORT);
         });
     })
     .catch((error) => {
-        console.log(error);
+        console.log("Database connection error:", error);
     });
-
