@@ -1,16 +1,16 @@
 const mongoose = require('mongoose')
 
 const productSchema = new mongoose.Schema({
-    title: String,
+    title: { type: String, required: true },
     description: String,
-    category_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' }, // assuming Category is another model
-    price: Number,
-    quantity: Number,
+    category_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
+    price: { type: Number, required: true, min: 0 },
+    quantity: { type: Number, required: true, min: 0 },
     img_card: String,
     color: { type: mongoose.Schema.Types.ObjectId, ref: 'Color' },
-    ratings: Number,
-    brand_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Brand' }, // assuming Brand is another model
-    model_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Model' }, // assuming Model is another model
+    ratings: { type: Number, default: 0 },
+    brand_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Brand' },
+    model_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Model' },
     
     // course_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Course'},
 })
