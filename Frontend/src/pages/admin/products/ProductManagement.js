@@ -1,25 +1,86 @@
-import React, { useState } from 'react';
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-  Grid,
-  InputAdornment,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  IconButton,
-} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, Button, TextField, Typography, Grid, InputAdornment, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import AdminDashboard from '../../AdminDashboard';
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+
 
 const ManageProducts = () => {
+  const [categories, setCategories] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const [models, setModels] = useState([]);
+  const [colors, setColors] = useState([]);
+
+
+  const [error, setError] = useState(null); // State to store error messages
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("/api/categories");
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+        const json = await response.json();
+        setCategories(json);
+      }
+      catch (err) {
+        console.error('Failed to fetch categories:', err);
+        setError(err.message);
+      }
+    };
+
+    const fetchBrands = async () => {
+      try {
+        const response = await fetch("/api/brands");
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+        const json = await response.json();
+        setBrands(json); // Set the fetched brands in state
+      } catch (err) {
+        console.error('Failed to fetch brands:', err);
+        setError(err.message); // Set the error message in state
+      }
+    };
+
+    const fetchModels = async () => {
+      try {
+        const response = await fetch("/api/models");
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+        const json = await response.json();
+        setModels(json);
+      }
+      catch (err) {
+        console.error('Failed to fetch models:', err);
+        setError(err.message);
+      }
+    };
+
+    const fetchColors = async () => {
+      try {
+        const response = await fetch("/api/colors");
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+        const json = await response.json();
+        setColors(json);
+      }
+      catch (err) {
+        console.error('Failed to fetch categories:', err);
+        setError(err.message);
+      }
+    };
+
+
+    fetchCategories();
+    fetchBrands();
+    fetchModels();
+    fetchColors();
+  }, [])
+
   const [productDetails, setProductDetails] = useState({
     brand: '',
     model: '',
@@ -27,36 +88,27 @@ const ManageProducts = () => {
     price: '',
     category: '',
     quantity: '',
-    description: '',
+    description: '', // Added description field
   });
 
   const [products, setProducts] = useState([]);
-  const [isEditing, setIsEditing] = useState(false); // State to track editing mode
-  const [editIndex, setEditIndex] = useState(null); // State to track which product is being edited
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
+    const newValue = value < 0 ? 0 : value;
+
     setProductDetails({
       ...productDetails,
-      [name]: value,
+      [name]: newValue,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (isEditing) {
-      // Update existing product
-      const updatedProducts = products.map((product, index) =>
-        index === editIndex ? productDetails : product
-      );
-      setProducts(updatedProducts);
-      setIsEditing(false);
-      setEditIndex(null);
-    } else {
-      // Add new product
-      setProducts([...products, productDetails]);
-    }
+    // Add the current product details to the products array
+    setProducts([...products, productDetails]);
 
     // Reset the form fields
     setProductDetails({
@@ -66,20 +118,14 @@ const ManageProducts = () => {
       price: '',
       category: '',
       quantity: '',
-      description: '',
+      description: '', // Reset description field
     });
   };
 
   const handleDelete = (index) => {
+    // Filter out the product at the specified index
     const updatedProducts = products.filter((_, i) => i !== index);
     setProducts(updatedProducts);
-  };
-
-  const handleEdit = (index) => {
-    const productToEdit = products[index];
-    setProductDetails(productToEdit);
-    setIsEditing(true);
-    setEditIndex(index);
   };
 
   return (
@@ -92,34 +138,60 @@ const ManageProducts = () => {
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <TextField
-                label="Brand"
-                variant="outlined"
-                name="brand"
-                value={productDetails.brand}
-                onChange={handleInputChange}
-                fullWidth
-              />
+              <FormControl variant="outlined" fullWidth>
+                <InputLabel id="brand-label">Brand</InputLabel>
+                <Select
+                  labelId="brand-label"
+                  label="Brand"
+                  name="brand"
+                  value={productDetails.brand}
+                  onChange={handleInputChange}
+                >
+                  {brands.map((brand) => (
+                    <MenuItem key={brand._id} value={brand.name}>
+                      {brand.name}
+                    </MenuItem>
+                  ))}
+
+                </Select>
+              </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                label="Model"
-                variant="outlined"
-                name="model"
-                value={productDetails.model}
-                onChange={handleInputChange}
-                fullWidth
-              />
+              <FormControl variant="outlined" fullWidth>
+                <InputLabel id="model-label">Model</InputLabel>
+                <Select
+                  labelId="model-label"
+                  label="Model"
+                  name="model"
+                  value={productDetails.model}
+                  onChange={handleInputChange}
+                >
+                  {models.map((model) => (
+                    <MenuItem key={model._id} value={model.name}>
+                      {model.name}
+                    </MenuItem>
+                  ))}
+
+                </Select>
+              </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                label="Color"
-                variant="outlined"
-                name="color"
-                value={productDetails.color}
-                onChange={handleInputChange}
-                fullWidth
-              />
+              <FormControl variant="outlined" fullWidth>
+                <InputLabel id="color-label">Color</InputLabel>
+                <Select
+                  labelId="color-label"
+                  label="Color"
+                  name="color"
+                  value={productDetails.color}
+                  onChange={handleInputChange}
+                >
+                  {colors.map((color) => (
+                    <MenuItem key={color._id} value={color.name}>
+                    {color.name}
+                  </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -129,8 +201,8 @@ const ManageProducts = () => {
                 value={productDetails.price}
                 onChange={handleInputChange}
                 inputProps={{
-                  step: '0.01',
-                  min: '0',
+                  step: "0.01",
+                  min: "0",
                   style: { textAlign: 'right' },
                 }}
                 InputProps={{
@@ -141,14 +213,23 @@ const ManageProducts = () => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                label="Category"
-                variant="outlined"
-                name="category"
-                value={productDetails.category}
-                onChange={handleInputChange}
-                fullWidth
-              />
+              <FormControl variant="outlined" fullWidth>
+                <InputLabel id="category-label">Category</InputLabel>
+                <Select
+                  labelId="category-label"
+                  label="Category"
+                  name="category"
+                  value={productDetails.category}
+                  onChange={handleInputChange}
+                >
+                  {categories.map((category) => (
+                    <MenuItem key={category._id} value={category.name}>
+                      {category.name}
+                    </MenuItem>
+                  ))}
+
+                </Select>
+              </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -159,6 +240,7 @@ const ManageProducts = () => {
                 value={productDetails.quantity}
                 onChange={handleInputChange}
                 fullWidth
+                inputProps={{ min: 0 }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -175,7 +257,7 @@ const ManageProducts = () => {
             </Grid>
           </Grid>
           <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
-            {isEditing ? 'Update Product' : 'Add Product'}
+            Add Product
           </Button>
         </form>
 
@@ -195,7 +277,7 @@ const ManageProducts = () => {
                   <TableCell>Category</TableCell>
                   <TableCell align="right">Quantity</TableCell>
                   <TableCell>Description</TableCell>
-                  <TableCell align="right">Actions</TableCell>
+                  <TableCell align="right">Actions</TableCell> {/* Added Actions column */}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -209,9 +291,6 @@ const ManageProducts = () => {
                     <TableCell align="right">{product.quantity}</TableCell>
                     <TableCell>{product.description}</TableCell>
                     <TableCell align="right">
-                      <IconButton color="primary" onClick={() => handleEdit(index)}>
-                        <EditIcon />
-                      </IconButton>
                       <IconButton color="secondary" onClick={() => handleDelete(index)}>
                         <DeleteIcon />
                       </IconButton>

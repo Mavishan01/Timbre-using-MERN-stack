@@ -4,7 +4,7 @@ const { getBrands,
         createBrand } = require("../controllers/brandController");
 const Brand = require("../models/brand");
 
-// Get all models
+// Get all brands
 router.get("/", getBrands);
 
 // POST a new workout

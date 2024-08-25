@@ -7,7 +7,7 @@ const productSchema = new mongoose.Schema({
     price: Number,
     quantity: Number,
     img_card: String,
-    color: String,
+    color: { type: mongoose.Schema.Types.ObjectId, ref: 'Color' },
     ratings: Number,
     brand_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Brand' }, // assuming Brand is another model
     model_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Model' }, // assuming Model is another model

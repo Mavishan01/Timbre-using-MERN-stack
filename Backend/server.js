@@ -14,14 +14,17 @@ const Admin = require("./models/admin");
 const Cart = require("./models/cart");
 const Wishlist = require("./models/wishlist");
 const Order = require("./models/order");
+const Color = require("./models/color")
 // const Auth = require("./models/user")
 
 // Importing routes
 const brandRoutes = require("./routes/brandRoute");
 const categoryRoutes = require("./routes/categoryRoute");
+const modelRoutes = require("./routes/modelRoute");
 const customerRoutes = require("./routes/customerRoute");
 const authRoutes = require("./routes/authRoute"); // Add auth routes
 const middlewareRoutes = require("./routes/middlewearRoute");
+const colorRoutes = require("./routes/colorRoute");
 
 // Middleware
 app.use(express.json()); // Converts incoming request bodies to JSON
@@ -35,9 +38,11 @@ app.use((req, res, next) => {
 // Routes
 app.use("/api/brands", brandRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/models", modelRoutes)
 app.use("/api/customers", customerRoutes);
 app.use("/api/auth", authRoutes); // Add the auth routes for handling login, signup, and admin login
 app.use("/api", middlewareRoutes);
+app.use("/api/colors", colorRoutes);
 
 // Connect to database
 mongoose

@@ -47,7 +47,7 @@ const FilterBox = () => {
     fetchBrands();
     fetchCategories();
   }, []);
-  
+
   const handleCategoryChange = (event) => {
     const selectedCategory = event.target.value;
     setSelectedCategory(selectedCategory);
@@ -56,7 +56,7 @@ const FilterBox = () => {
 
   const handleCheckboxChange = (event) => {
     const { value } = event.target;
-    setCheckedItems((prev) => 
+    setCheckedItems((prev) =>
       prev.includes(value) ? prev.filter(item => item !== value) : [...prev, value]
     );
   };
@@ -76,7 +76,7 @@ const FilterBox = () => {
   return (
     <Box sx={{ width: 250, padding: 2, borderRight: '1px solid #ccc' }}>
       <Typography variant="h6">Filters</Typography>
-      
+
       <FormControl fullWidth margin="normal">
         <InputLabel>Category</InputLabel>
         <Select
@@ -91,7 +91,7 @@ const FilterBox = () => {
           ))}
         </Select>
       </FormControl>
-      <AddBrands/>
+      <AddBrands />
 
       <FormControl component="fieldset" margin="normal">
         <Typography variant="subtitle1">Brands</Typography>
@@ -99,7 +99,7 @@ const FilterBox = () => {
           <FormControlLabel
             key={brand._id} // Assuming each brand has a unique _id
             control={
-              <Checkbox 
+              <Checkbox
                 value={brand.name} // Assuming each brand has a 'name' field
                 onChange={handleCheckboxChange}
               />

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Grid, Card, CardMedia, CardContent, Link } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
-import InstrumentCard from './InstrumentCard';
 // Sample data for categories, best sellers, and new arrivals
 
 const bestSellers = [
@@ -91,8 +90,7 @@ const Home = () => {
           <Grid item xs={12} sm={6} md={3} key={item.title}>
             <Link to={item.link} style={{ textDecoration: 'none' }}>
               <Card>
-                <InstrumentCard/>
-                {/* <CardMedia
+                <CardMedia
                   component="img"
                   height="140"
                   image={item.image}
@@ -103,7 +101,7 @@ const Home = () => {
                   <Typography variant="body2" color="text.secondary">
                     {item.price}
                   </Typography>
-                </CardContent> */}
+                </CardContent>
               </Card>
             </Link>
           </Grid>
@@ -117,8 +115,7 @@ const Home = () => {
       <Grid container spacing={4}>
         {newArrivals.map((item) => (
           <Grid item xs={12} sm={6} md={2} key={item.title}>
-            <InstrumentCard/>
-            {/* <Link to={item.link} style={{ textDecoration: 'none' }}>
+            <Link to={item.link} style={{ textDecoration: 'none' }}>
               <Card>
                 <CardMedia
                   component="img"
@@ -133,7 +130,7 @@ const Home = () => {
                   </Typography>
                 </CardContent>
               </Card>
-            </Link> */}
+            </Link>
           </Grid>
         ))}
       </Grid>
