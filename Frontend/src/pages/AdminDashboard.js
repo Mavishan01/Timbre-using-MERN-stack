@@ -14,10 +14,20 @@ const Sidebar = styled('div')(({ theme }) => ({
 
 const AdminPage = () => {
   const navigate = useNavigate();
+<<<<<<< Updated upstream
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate("/");
   };
+=======
+  
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate("/");
+    window.location.reload(); // Refresh the page after navigating to the home page
+  };
+
+>>>>>>> Stashed changes
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -55,6 +65,7 @@ const AdminPage = () => {
         <Box sx={{ flexGrow: 1 }} />
 
         <Button
+<<<<<<< Updated upstream
               startIcon={<LogoutIcon />}
               // variant="outlined"
               color="error"
@@ -62,13 +73,25 @@ const AdminPage = () => {
             >
               Logout
             </Button>
+=======
+          startIcon={<LogoutIcon />}
+          color="error"
+          onClick={handleLogout}
+        >
+          Logout
+        </Button>
+>>>>>>> Stashed changes
         <Divider />
       </Sidebar>
       <Box
         component="main"
         sx={{ flexGrow: 1, padding: 3 }}
       >
+<<<<<<< Updated upstream
         
+=======
+        {/* Content of the admin page will be displayed here */}
+>>>>>>> Stashed changes
       </Box>
     </Box>
   );

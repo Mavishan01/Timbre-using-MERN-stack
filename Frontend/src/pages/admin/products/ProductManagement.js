@@ -1,6 +1,25 @@
 import React, { useState } from 'react';
-import { Box, Button, TextField, Typography, Grid, InputAdornment, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@mui/material';
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Grid,
+  InputAdornment,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+<<<<<<< Updated upstream
+=======
+import EditIcon from '@mui/icons-material/Edit';
+>>>>>>> Stashed changes
 import AdminDashboard from '../../AdminDashboard';
 
 const ManageProducts = () => {
@@ -11,10 +30,12 @@ const ManageProducts = () => {
     price: '',
     category: '',
     quantity: '',
-    description: '', // Added description field
+    description: '',
   });
 
   const [products, setProducts] = useState([]);
+  const [isEditing, setIsEditing] = useState(false); // State to track editing mode
+  const [editIndex, setEditIndex] = useState(null); // State to track which product is being edited
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -27,8 +48,18 @@ const ManageProducts = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Add the current product details to the products array
-    setProducts([...products, productDetails]);
+    if (isEditing) {
+      // Update existing product
+      const updatedProducts = products.map((product, index) =>
+        index === editIndex ? productDetails : product
+      );
+      setProducts(updatedProducts);
+      setIsEditing(false);
+      setEditIndex(null);
+    } else {
+      // Add new product
+      setProducts([...products, productDetails]);
+    }
 
     // Reset the form fields
     setProductDetails({
@@ -38,16 +69,25 @@ const ManageProducts = () => {
       price: '',
       category: '',
       quantity: '',
-      description: '', // Reset description field
+      description: '',
     });
   };
 
   const handleDelete = (index) => {
-    // Filter out the product at the specified index
     const updatedProducts = products.filter((_, i) => i !== index);
     setProducts(updatedProducts);
   };
 
+<<<<<<< Updated upstream
+=======
+  const handleEdit = (index) => {
+    const productToEdit = products[index];
+    setProductDetails(productToEdit);
+    setIsEditing(true);
+    setEditIndex(index);
+  };
+
+>>>>>>> Stashed changes
   return (
     <Box sx={{ display: 'flex' }}>
       <AdminDashboard />
@@ -95,8 +135,13 @@ const ManageProducts = () => {
                 value={productDetails.price}
                 onChange={handleInputChange}
                 inputProps={{
+<<<<<<< Updated upstream
                   step: "0.01",
                   min: "0",
+=======
+                  step: '0.01',
+                  min: '0',
+>>>>>>> Stashed changes
                   style: { textAlign: 'right' },
                 }}
                 InputProps={{
@@ -141,7 +186,11 @@ const ManageProducts = () => {
             </Grid>
           </Grid>
           <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+<<<<<<< Updated upstream
             Add Product
+=======
+            {isEditing ? 'Update Product' : 'Add Product'}
+>>>>>>> Stashed changes
           </Button>
         </form>
 
@@ -161,7 +210,11 @@ const ManageProducts = () => {
                   <TableCell>Category</TableCell>
                   <TableCell align="right">Quantity</TableCell>
                   <TableCell>Description</TableCell>
+<<<<<<< Updated upstream
                   <TableCell align="right">Actions</TableCell> {/* Added Actions column */}
+=======
+                  <TableCell align="right">Actions</TableCell>
+>>>>>>> Stashed changes
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -175,6 +228,12 @@ const ManageProducts = () => {
                     <TableCell align="right">{product.quantity}</TableCell>
                     <TableCell>{product.description}</TableCell>
                     <TableCell align="right">
+<<<<<<< Updated upstream
+=======
+                      <IconButton color="primary" onClick={() => handleEdit(index)}>
+                        <EditIcon />
+                      </IconButton>
+>>>>>>> Stashed changes
                       <IconButton color="secondary" onClick={() => handleDelete(index)}>
                         <DeleteIcon />
                       </IconButton>
