@@ -14,10 +14,13 @@ const Sidebar = styled('div')(({ theme }) => ({
 
 const AdminPage = () => {
   const navigate = useNavigate();
+  
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate("/");
+    window.location.reload(); // Refresh the page after navigating to the home page
   };
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -55,20 +58,19 @@ const AdminPage = () => {
         <Box sx={{ flexGrow: 1 }} />
 
         <Button
-              startIcon={<LogoutIcon />}
-              // variant="outlined"
-              color="error"
-              onClick={handleLogout}
-            >
-              Logout
-            </Button>
+          startIcon={<LogoutIcon />}
+          color="error"
+          onClick={handleLogout}
+        >
+          Logout
+        </Button>
         <Divider />
       </Sidebar>
       <Box
         component="main"
         sx={{ flexGrow: 1, padding: 3 }}
       >
-        
+        {/* Content of the admin page will be displayed here */}
       </Box>
     </Box>
   );

@@ -4,15 +4,16 @@ import AddBrands from './AddBrands';
 import { useNavigate } from 'react-router-dom';
 
 const FilterBox = () => {
-  //const [category, setCategory] = useState('');
   const [checkedItems, setCheckedItems] = useState([]);
   const [quantity, setQuantity] = useState([1, 10]);
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   const [brands, setBrands] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [colors, setColors] = useState(['#FF5733', '#33FF57', '#3357FF', '#F333FF']); // Example color options
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [error, setError] = useState(null); // State to store error messages
+  const [selectedColors, setSelectedColors] = useState([]);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,10 +24,10 @@ const FilterBox = () => {
           throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
         const json = await response.json();
-        setBrands(json); // Set the fetched brands in state
+        setBrands(json);
       } catch (err) {
         console.error('Failed to fetch brands:', err);
-        setError(err.message); // Set the error message in state
+        setError(err.message);
       }
     };
 
@@ -37,10 +38,10 @@ const FilterBox = () => {
           throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
         const json = await response.json();
-        setCategories(json); // Set the fetched categories in state
+        setCategories(json);
       } catch (err) {
         console.error('Failed to fetch categories:', err);
-        setError(err.message); // Set the error message in state
+        setError(err.message);
       }
     };
 
@@ -51,12 +52,12 @@ const FilterBox = () => {
   const handleCategoryChange = (event) => {
     const selectedCategory = event.target.value;
     setSelectedCategory(selectedCategory);
-    navigate(`/products/${selectedCategory.toLowerCase()}`)
+    navigate(`/products/${selectedCategory.toLowerCase()}`);
   };
 
   const handleCheckboxChange = (event) => {
     const { value } = event.target;
-    setCheckedItems((prev) =>
+    setCheckedItems((prev) => 
       prev.includes(value) ? prev.filter(item => item !== value) : [...prev, value]
     );
   };
@@ -69,14 +70,16 @@ const FilterBox = () => {
     setMaxPrice(event.target.value);
   };
 
-  const handleQuantityChange = (event, newValue) => {
-    setQuantity(newValue);
+  const handleColorChange = (color) => {
+    setSelectedColors((prev) => 
+      prev.includes(color) ? prev.filter(item => item !== color) : [...prev, color]
+    );
   };
 
   return (
     <Box sx={{ width: 250, padding: 2, borderRight: '1px solid #ccc' }}>
       <Typography variant="h6">Filters</Typography>
-
+      
       <FormControl fullWidth margin="normal">
         <InputLabel>Category</InputLabel>
         <Select
@@ -91,16 +94,16 @@ const FilterBox = () => {
           ))}
         </Select>
       </FormControl>
-      <AddBrands />
+      <AddBrands/>
 
       <FormControl component="fieldset" margin="normal">
         <Typography variant="subtitle1">Brands</Typography>
         {brands && brands.map((brand) => (
           <FormControlLabel
-            key={brand._id} // Assuming each brand has a unique _id
+            key={brand._id}
             control={
-              <Checkbox
-                value={brand.name} // Assuming each brand has a 'name' field
+              <Checkbox 
+                value={brand.name}
                 onChange={handleCheckboxChange}
               />
             }
@@ -125,6 +128,25 @@ const FilterBox = () => {
           onChange={handleMaxPriceChange}
           sx={{ width: '45%' }}
         />
+      </Box>
+
+      <Typography variant="subtitle1" gutterBottom>Colors</Typography>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+        {colors.map((color) => (
+          <Box
+            key={color}
+            sx={{
+              width: 24,
+              height: 24,
+              borderRadius: '50%',
+              backgroundColor: color,
+              margin: 1,
+              cursor: 'pointer',
+              border: selectedColors.includes(color) ? '2px solid black' : 'none'
+            }}
+            onClick={() => handleColorChange(color)}
+          />
+        ))}
       </Box>
     </Box>
   );
