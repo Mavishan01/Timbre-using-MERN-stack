@@ -11,6 +11,7 @@ const ManageProducts = () => {
     const [brands, setBrands] = useState([]);
     const [models, setModels] = useState([]);
     const [colors, setColors] = useState([]);
+    const [products, setProducts] = useState([]);
 
 
     const [error, setError] = useState(null); // State to store error messages
@@ -75,11 +76,26 @@ const ManageProducts = () => {
             }
         };
 
+        const fetchProducts = async() => {
+            try {
+                const response = await fetch("/api/products");
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+                }
+                const json = await response.json();
+                setProducts(json);
+            }
+            catch (err) {
+                console.error('Failed to fetch products:', err);
+                setError(err.message);
+            }
+        }
 
         fetchCategories();
         fetchBrands();
         fetchModels();
         fetchColors();
+        fetchProducts();
     }, [])
 
     const [productDetails, setProductDetails] = useState({
@@ -92,15 +108,14 @@ const ManageProducts = () => {
         description: '', // Added description field
     });
 
-    const [products, setProducts] = useState([]);
     const [isEditing, setIsEditing] = useState(false); // State to track editing mode
     const [editIndex, setEditIndex] = useState(null); // State to track which product is being edited
 
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-
         const newValue = value < 0 ? 0 : value;
+        console.log(newValue)
 
         setProductDetails({
             ...productDetails,
@@ -108,32 +123,80 @@ const ManageProducts = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (isEditing) {
-            // Update existing product
-            const updatedProducts = products.map((product, index) =>
-                index === editIndex ? productDetails : product
-            );
-            setProducts(updatedProducts);
-            setIsEditing(false);
-            setEditIndex(null);
-        } else {
-            // Add new product
-            setProducts([...products, productDetails]);
+    
+        const newProduct = {
+            brand_id: productDetails.brand,  // Sending brand ID
+            model_id: productDetails.model,  // Sending model ID
+            color_id: productDetails.color,  // Sending color ID
+            price: productDetails.price,
+            category_id: productDetails.category,  // Sending category ID
+            quantity: productDetails.quantity,
+            description: productDetails.description,
+        };
+        try {
+            let response;
+            if (isEditing) {
+                
+                // Update existing product
+                response = await fetch(`/api/products/${products[editIndex]._id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newProduct),
+                });
+    
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+                }
+    
+                const updatedProduct = await response.json();
+                const updatedProducts = products.map((product, index) =>
+                    index === editIndex ? updatedProduct : product
+                );
+    
+                setProducts(updatedProducts);
+                setIsEditing(false);
+                setEditIndex(null);
+            } else {
+                console.log(newProduct)
+                // Add new product
+                response = await fetch('/api/products', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newProduct),
+                });
+    
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+                }
+    
+                const savedProduct = await response.json();
+                window.location.reload();
+                setProducts([...products, savedProduct]);
+            }
+    
+            // Reset the form fields
+            setProductDetails({
+                brand: '',
+                model: '',
+                color: '',
+                price: '',
+                category: '',
+                quantity: '',
+                description: '',
+            });
+            setError(null); // Clear any previous errors
+        } catch (err) {
+            console.error('Failed to add/update product:', err);
+            setError(err.message); // Set the error message in state
         }
-        // Reset the form fields
-        setProductDetails({
-            brand: '',
-            model: '',
-            color: '',
-            price: '',
-            category: '',
-            quantity: '',
-            description: '', // Reset description field
-        });
     };
+    
 
     const handleDelete = (index) => {
         // Filter out the product at the specified index
@@ -169,7 +232,7 @@ const ManageProducts = () => {
                                     onChange={handleInputChange}
                                 >
                                     {brands.map((brand) => (
-                                        <MenuItem key={brand._id} value={brand.name}>
+                                        <MenuItem key={brand._id} value={brand._id}>
                                             {brand.name}
                                         </MenuItem>
                                     ))}
@@ -188,7 +251,7 @@ const ManageProducts = () => {
                                     onChange={handleInputChange}
                                 >
                                     {models.map((model) => (
-                                        <MenuItem key={model._id} value={model.name}>
+                                        <MenuItem key={model._id} value={model._id}>
                                             {model.name}
                                         </MenuItem>
                                     ))}
@@ -207,7 +270,7 @@ const ManageProducts = () => {
                                     onChange={handleInputChange}
                                 >
                                     {colors.map((color) => (
-                                        <MenuItem key={color._id} value={color.name}>
+                                        <MenuItem key={color._id} value={color._id}>
                                             {color.name}
                                         </MenuItem>
                                     ))}
@@ -244,7 +307,7 @@ const ManageProducts = () => {
                                     onChange={handleInputChange}
                                 >
                                     {categories.map((category) => (
-                                        <MenuItem key={category._id} value={category.name}>
+                                        <MenuItem key={category._id} value={category._id}>
                                             {category.name}
                                         </MenuItem>
                                     ))}
@@ -304,12 +367,12 @@ const ManageProducts = () => {
                             <TableBody>
                                 {products.map((product, index) => (
                                     <TableRow key={index}>
-                                        <TableCell>{product.brand}</TableCell>
-                                        <TableCell>{product.model}</TableCell>
-                                        <TableCell>{product.color}</TableCell>
-                                        <TableCell align="right">{product.price}</TableCell>
-                                        <TableCell>{product.category}</TableCell>
-                                        <TableCell align="right">{product.quantity}</TableCell>
+                                        <TableCell>{product.brand_id?.name || 'N/A'}</TableCell>
+                                        <TableCell>{product.model_id?.name || 'N/A'}</TableCell>
+                                        <TableCell>{product.color_id?.name || 'N/A'}</TableCell>
+                                        <TableCell>{product.price}</TableCell>
+                                        <TableCell>{product.category_id?.name || 'N/A'}</TableCell>
+                                        <TableCell>{product.quantity}</TableCell>
                                         <TableCell>{product.description}</TableCell>
                                         <TableCell align="right">
                                             <IconButton color="primary" onClick={() => handleEdit(index)}>
