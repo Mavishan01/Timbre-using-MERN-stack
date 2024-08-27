@@ -76,7 +76,7 @@ const ManageProducts = () => {
             }
         };
 
-        const fetchProducts = async() => {
+        const fetchProducts = async () => {
             try {
                 const response = await fetch("/api/products");
                 if (!response.ok) {
@@ -125,8 +125,18 @@ const ManageProducts = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
+        const brandName = brands.find(brand => brand._id === productDetails.brand)?.name || '';
+        const modelName = models.find(model => model._id === productDetails.model)?.name || '';
+        const categoryName = categories.find(category => category._id === productDetails.category)?.name || '';
+        const colorName = colors.find(color => color._id === productDetails.color)?.name || '';
+
+        const productTitle = `${brandName} ${modelName} ${categoryName}, ${colorName}`.trim();
+
+
+        console.log(productTitle)
         const newProduct = {
+            title: productTitle,
             brand_id: productDetails.brand,  // Sending brand ID
             model_id: productDetails.model,  // Sending model ID
             color_id: productDetails.color,  // Sending color ID
@@ -135,28 +145,29 @@ const ManageProducts = () => {
             quantity: productDetails.quantity,
             description: productDetails.description,
         };
+        console.log(newProduct)
         try {
             let response;
             if (isEditing) {
-                
+
                 // Update existing product
-                response = await fetch(`/api/products/${products[editIndex]._id}`, {
+                response = await fetch(`/api/products/update/${products[editIndex]._id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(newProduct),
                 });
-    
+
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status} ${response.statusText}`);
                 }
-    
+
                 const updatedProduct = await response.json();
                 const updatedProducts = products.map((product, index) =>
                     index === editIndex ? updatedProduct : product
                 );
-    
+
                 setProducts(updatedProducts);
                 setIsEditing(false);
                 setEditIndex(null);
@@ -170,16 +181,16 @@ const ManageProducts = () => {
                     },
                     body: JSON.stringify(newProduct),
                 });
-    
+
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status} ${response.statusText}`);
                 }
-    
+
                 const savedProduct = await response.json();
                 window.location.reload();
                 setProducts([...products, savedProduct]);
             }
-    
+
             // Reset the form fields
             setProductDetails({
                 brand: '',
@@ -196,21 +207,59 @@ const ManageProducts = () => {
             setError(err.message); // Set the error message in state
         }
     };
-    
 
-    const handleDelete = (index) => {
-        // Filter out the product at the specified index
-        const updatedProducts = products.filter((_, i) => i !== index);
-        setProducts(updatedProducts);
+
+    const handleDelete = async (index) => {
+        const productToDelete = products[index];
+    
+        try {
+            // Make a request to your backend to delete the product
+            const response = await fetch(`/api/products/delete/${productToDelete._id}`, {
+                method: 'DELETE',
+            });
+    
+            if (response.ok) {
+                // If the deletion was successful, update the state to remove the product
+                const updatedProducts = products.filter((_, i) => i !== index);
+                setProducts(updatedProducts);
+                console.log('Product deleted successfully');
+            } else {
+                const data = await response.json();
+                console.error('Failed to delete product:', data.message);
+            }
+        } catch (error) {
+            console.error('Error deleting product:', error);
+        }
     };
 
     const handleEdit = (index) => {
+
         const productToEdit = products[index];
-        setProductDetails(productToEdit);
+        // Find the correct names based on the IDs
+        const brandName = brands.find(brand => brand._id === productToEdit.brand)?.name || '';
+        const modelName = models.find(model => model._id === productToEdit.model)?.name || '';
+        const categoryName = categories.find(category => category._id === productToEdit.category)?.name || '';
+        const colorName = colors.find(color => color._id === productToEdit.color)?.name || '';
+
+        // Set the product details with the names for display
+        setProductDetails({
+            ...productToEdit,
+            brand: brandName,
+            model: modelName,
+            category: categoryName,
+            color: colorName
+        });
+        // setProductDetails(productToEdit);
         setIsEditing(true);
         setEditIndex(index);
     };
 
+    // const handleEdit = (index) => {
+    //     const productToEdit = products[index];
+    //     setProductDetails(productToEdit);  // Populate the form with the product details
+    //     setIsEditing(true);                // Set editing mode
+    //     setEditIndex(index);               // Store the index for saving later
+    // };
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -341,7 +390,7 @@ const ManageProducts = () => {
                         </Grid>
                     </Grid>
                     <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
-                        Add Product
+                        {isEditing ? 'Update Product' : 'Add Product'}
                     </Button>
                 </form>
 
@@ -354,6 +403,7 @@ const ManageProducts = () => {
                         <Table sx={{ minWidth: 650 }} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
+                                    <TableCell>Title</TableCell>
                                     <TableCell>Brand</TableCell>
                                     <TableCell>Model</TableCell>
                                     <TableCell>Color</TableCell>
@@ -367,6 +417,7 @@ const ManageProducts = () => {
                             <TableBody>
                                 {products.map((product, index) => (
                                     <TableRow key={index}>
+                                        <TableCell>{product.title}</TableCell>
                                         <TableCell>{product.brand_id?.name || 'N/A'}</TableCell>
                                         <TableCell>{product.model_id?.name || 'N/A'}</TableCell>
                                         <TableCell>{product.color_id?.name || 'N/A'}</TableCell>

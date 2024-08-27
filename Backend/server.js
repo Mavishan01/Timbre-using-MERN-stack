@@ -25,6 +25,7 @@ const customerRoutes = require("./routes/customerRoute");
 const authRoutes = require("./routes/authRoute"); // Add auth routes
 const middlewareRoutes = require("./routes/middlewearRoute");
 const colorRoutes = require("./routes/colorRoute");
+const productRoutes = require("./routes/productRoute");
 
 // Middleware
 app.use(express.json()); // Converts incoming request bodies to JSON
@@ -43,6 +44,7 @@ app.use("/api/customers", customerRoutes);
 app.use("/api/auth", authRoutes); // Add the auth routes for handling login, signup, and admin login
 app.use("/api", middlewareRoutes);
 app.use("/api/colors", colorRoutes);
+app.use("/api/products", productRoutes);
 
 // Connect to database
 mongoose

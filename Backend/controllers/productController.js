@@ -28,13 +28,13 @@ const getProducts = async (req, res) => {
         console.error('Error fetching products:', error);
         res.status(500).json({ message: 'Failed to fetch products', error: error.message });
     }
-};    
+};
 
 
 const createProduct = async (req, res) => {
     try {
         const { title, description, category_id, price, quantity, img_card, color_id, ratings, brand_id, model_id } = req.body;
-
+        console.log(req.body)
         // Create a new product instance
         const newProduct = new Product({
             title,
@@ -49,6 +49,7 @@ const createProduct = async (req, res) => {
             model_id,
         });
 
+        console.log(newProduct)
         // Save the product to the database
         const savedProduct = await newProduct.save();
 
@@ -59,7 +60,56 @@ const createProduct = async (req, res) => {
         res.status(400).json({ message: 'Failed to create product', error: error.message });
     }
 };
+
+const updateProduct = async (req, res) => {
+    const productID = req.params.id;
+    const updateData = req.body;
+
+    try {
+        const updatedProduct = await Product.findByIdAndUpdate(
+            productID,
+            updateData,
+            { new: true }
+        );
+
+        if (!updatedProduct) {
+            console.log("Product not found");
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        console.log("Product updated successfully");
+
+        res.status(200).json({
+            message: 'Product updated successfully',
+            product: updatedProduct,
+        });
+
+    } catch (error) {
+        console.error('Error updating product:', error);
+        res.status(500).json({ message: 'Server error', error });
+    }
+};
+
+const deleteProduct = async (req, res) => {
+    const productId = req.params.id;
+
+    try {
+        const deletedProduct = await Product.findByIdAndDelete(productId);
+
+        if (!deletedProduct) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        res.status(200).json({ message: 'Product deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting product:', error);
+        res.status(400).json({ message: 'Server error', error });
+    }
+};
+
 module.exports = {
     getProducts,
-    createProduct
+    createProduct,
+    updateProduct,
+    deleteProduct
 }
