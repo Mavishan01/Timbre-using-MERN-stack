@@ -8,7 +8,9 @@ const customerSchema = new mongoose.Schema({
     email: { type: String, required: [true,"Email required"], unique: true },
     password: { type: String, required: [true,"Password required"] },
     address: { type: String },
-    mobile: { type: String }
+    mobile: { type: String },
+    status: {type: Number, default: 1 }
+    
 },{timestamps:true});
 
 const Customer = mongoose.model('Customer', customerSchema);

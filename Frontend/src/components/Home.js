@@ -121,7 +121,7 @@ const Home = () => {
   return (
     <Box sx={{ padding: 2 }}>
       {/* Banner Section */}
-      {/* // <CarouselComponent/> */}
+      <CarouselComponent />
 
       {/* Shop by Category Section */}
       <Typography variant="h4" component="h2" gutterBottom>
