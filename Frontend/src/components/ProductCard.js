@@ -8,8 +8,16 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Box, Button } from "@mui/material";
 import Ratings from "./Ratings";
 import { jwtDecode } from 'jwt-decode'
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+
 
 export default function ProductCard({ item }) {
+  const navigate = useNavigate(); // Initialize navigate function
+
+  const handleCardClick = () => {
+    navigate('/productpage'); // Navigate to the generic ProductPage
+  };
+
   const handleAddToCart = () => {
     const token = localStorage.getItem('token')
     const decodedToken = jwtDecode(token);
@@ -32,7 +40,8 @@ export default function ProductCard({ item }) {
       })
   }
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 345, boxShadow: 'none' }} onClick={handleCardClick} style={{ cursor: 'pointer' }}> {/* Add onClick handler */}
+
       <CardMedia
         component="img"
         height="194"

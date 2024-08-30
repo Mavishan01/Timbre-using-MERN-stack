@@ -16,6 +16,7 @@ import { ThemeContextProvider } from './themecontext/ThemeContext';
 import { AuthProvider, AuthContext } from './contexts/AuthContext';
 import AuthRoute from './components/AuthRoute'; // Import AuthRoute
 import AdminRoute from './components/AdminRoute'; // Import AdminRoute
+import ProductPage from './components/ProductPage.js';
 
 import Dashboard from './pages/admin/Dashboard';
 import ManageUsers from './pages/admin/ManageUsers';
@@ -70,6 +71,7 @@ const App = () => {
           <Route path="/admin/brands" element={<BrandManagement />} /> {/* Updated route */}
           <Route path="/admin/models" element={<ModelManagement />} /> {/* Updated route */}
           <Route path="/admin/settings" element={<Settings />} />
+          <Route path="/productpage" element={<ProductPage />} /> {/* Define route for ProductPage */}
 
         </Routes>
         {/* <Footer /> */}
