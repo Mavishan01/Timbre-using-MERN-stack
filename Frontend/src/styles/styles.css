@@ -1,0 +1,86 @@
+.example-container {
+    margin-top: 50px;
+    color: #494949;
+}
+
+.example-carousel .MuiPaper-root {
+    background-color: transparent;
+}
+
+.banner {
+    height: 400px;
+    position: relative;
+}
+
+.media {
+    background-color: white;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    transition: 300ms;
+    cursor: pointer;
+}
+
+.media:hover {
+    filter: brightness(115%);
+}
+
+.media-caption {
+    text-overflow: ellipsis;
+    position: absolute;
+    bottom: 0;
+    padding: 15px;
+    background-color: black;
+    color: white;
+    opacity: 0.6;
+    width: 100%;
+    height: 10%;
+    font-size: 16px;
+    font-weight: 200;
+    transition: 300ms;
+    cursor: pointer;
+}
+
+.media-caption:hover {
+    opacity: 0.8;
+}
+
+.banner-grid {
+    height: 100%;
+    position: relative;
+}
+
+.content {
+    color: white;
+    background-color: #d32f2f;
+    height: 100%;
+    padding: 30px;
+    transition: 300ms;
+    cursor: pointer;
+}
+
+.content:hover,
+.content:active {
+    background-color: #b71c1c;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 500;
+    color: white;
+}
+
+.caption {
+    margin-top: 10px;
+    font-size: 18px;
+    color: white;
+}
+
+.view-button {
+    margin-top: 40px;
+    color: white;
+    font-size: 18px;
+    border: 3px solid white;
+    text-transform: capitalize;
+    transition: 200ms;
+}

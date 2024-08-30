@@ -11,17 +11,13 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import HoverRating from './HoverRating';
 import InstrumentImage from '../components/pexels-pixabay-39348.jpg';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Ratings from './Ratings';
 
-export default function InstrumentCard() {
+export default function InstrumentCard({ item }) {
   return (
     <Card sx={{ maxWidth: 412, boxShadow: 'none' }}> {/* Add this line */}
-      <CardHeader
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
-      />
+      
       <CardMedia
         component="img"
         height="194"
@@ -30,16 +26,19 @@ export default function InstrumentCard() {
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          This is about the instrument
+          {item?.title}
         </Typography>
         <Typography variant="h4" color="text.secondary">
-          100$
+          LKR {item?.price}
         </Typography>
-        <HoverRating />
+        <Ratings value={item?.ratings}/>
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
+          <FavoriteIcon  />
+        </IconButton>
+        <IconButton aria-label="add to favorites">
+          <ShoppingCartIcon/>
         </IconButton>
       </CardActions>
     </Card>

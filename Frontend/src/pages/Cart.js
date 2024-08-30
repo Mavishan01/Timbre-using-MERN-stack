@@ -16,14 +16,37 @@ const Cart = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      //
+      fetch('api/cart/', {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message === "Success") {
+            const items = data.products.map(product => {
+              return {
+                id: product._id,
+                product_id: product.product_id._id,
+                name: product.product_id.title,
+                quantity: product.quantity,
+                price: product.product_id.price,
+                imageUrl: 'http://localhost:4000/products/' + product.product_id.img_card,
+                status: false
+              };
+            });
+            console.log(items)
+            setCartItems(items)
+          } else {
+            alert(data.message)
+          }
+        })
+        .catch(error => console.error('Error:', error));
     }
     else {
-      
+
       console.error("No token found, redirecting to login.");
       navigate("/");
     }
-  }, []);
+  }, [navigate]);
 
   const handleQuantityChange = (id, increment) => {
     setCartItems(prevItems =>
@@ -36,7 +59,15 @@ const Cart = () => {
   };
 
   const handleDelete = (id) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
+    fetch(`api/cart/deleteProduct/${id}`, { method: "DELETE" })
+      .then(response => response.json())
+      .then(data => {
+        setCartItems(prevItems => {
+          return prevItems.filter(item => item.id !== id)
+        }
+        );
+      })
+      .catch(error => console.error('Error:', error));
   };
 
   const handleSelectChange = (id) => {
@@ -70,7 +101,7 @@ const Cart = () => {
             Your cart is empty
           </Typography>
         ) : (
-          cartItems.map((item) => (
+          cartItems?.map((item) => (
             <Box key={item.id} sx={{ mb: 2 }}>
               <Grid container spacing={2} alignItems="center">
                 <Grid item xs={12} sm={3} md={2} sx={{ display: 'flex', alignItems: 'center' }}>
@@ -90,8 +121,8 @@ const Cart = () => {
                     </Grid>
                     <Grid item xs={12} sm={6} container spacing={1} alignItems="center" justifyContent="flex-end">
                       <Grid item>
-                        <IconButton 
-                          onClick={() => handleQuantityChange(item.id, -1)} 
+                        <IconButton
+                          onClick={() => handleQuantityChange(item.id, -1)}
                           disabled={item.quantity <= 1}
                           sx={{
                             border: '1px solid',
@@ -108,7 +139,7 @@ const Cart = () => {
                         <Typography variant="body1">{item.quantity}</Typography>
                       </Grid>
                       <Grid item>
-                        <IconButton 
+                        <IconButton
                           onClick={() => handleQuantityChange(item.id, 1)}
                           sx={{
                             border: '1px solid',

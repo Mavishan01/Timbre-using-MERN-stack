@@ -9,7 +9,7 @@ const customerSchema = new mongoose.Schema({
     password: { type: String, required: [true,"Password required"] },
     address: { type: String },
     mobile: { type: String }
-});
+},{timestamps:true});
 
 const Customer = mongoose.model('Customer', customerSchema);
 

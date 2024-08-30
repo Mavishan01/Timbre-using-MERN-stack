@@ -1,10 +1,10 @@
 const mongoose = require('mongoose')
 
 const brandSchema = new mongoose.Schema({
-    name: String,
+    name: {type:String , required:true}
     
     // course_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Course'},
-})
+},{timestamps:true})
 
 const Brand = mongoose.model('Brand', brandSchema)
 

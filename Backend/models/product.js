@@ -13,7 +13,7 @@ const productSchema = new mongoose.Schema({
     model_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Model' },
     
     // course_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Course'},
-})
+},{timestamps:true})
 
 const Product = mongoose.model('Product', productSchema)
 

@@ -4,7 +4,7 @@ const modelSchema = new mongoose.Schema({
     name: String,
     
     // course_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Course'},
-})
+},{timestamps:true})
 
 const Model = mongoose.model('Model', modelSchema)
 

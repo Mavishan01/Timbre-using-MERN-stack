@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Box, FormControl, InputLabel, MenuItem, Select, Checkbox, FormControlLabel, Typography, TextField } from '@mui/material';
-import AddBrands from './AddBrands';
 import { useNavigate } from 'react-router-dom';
 
 const FilterBox = () => {
@@ -94,7 +93,6 @@ const FilterBox = () => {
           ))}
         </Select>
       </FormControl>
-      <AddBrands/>
 
       <FormControl component="fieldset" margin="normal">
         <Typography variant="subtitle1">Brands</Typography>

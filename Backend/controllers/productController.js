@@ -33,8 +33,9 @@ const getProducts = async (req, res) => {
 
 const createProduct = async (req, res) => {
     try {
-        const { title, description, category_id, price, quantity, img_card, color_id, ratings, brand_id, model_id } = req.body;
-        console.log(req.body)
+        const { title, description, category_id, price, quantity, color_id, ratings, brand_id, model_id } = req.body;
+        console.log(req.file)
+        const image = req.file.filename;
         // Create a new product instance
         const newProduct = new Product({
             title,
@@ -42,7 +43,7 @@ const createProduct = async (req, res) => {
             category_id,
             price,
             quantity,
-            img_card,
+            img_card:image,
             color_id,
             ratings,
             brand_id,
@@ -107,9 +108,25 @@ const deleteProduct = async (req, res) => {
     }
 };
 
+const getNewArrivals = async (req, res) => {
+    try {
+        const products = await Product.find()
+            .sort({ createdAt: -1 })
+            .limit(6);
+        if (!products) {
+            res.status(400).json({ message: 'Products not found', error });
+        }
+        res.status(200).json({ message: "Success", products: products })
+    } catch (error) {
+        console.error('Error deleting new arrivals:', error);
+        res.status(500).json({ message: 'Server error', error });
+    }
+}
+
 module.exports = {
     getProducts,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    getNewArrivals
 }

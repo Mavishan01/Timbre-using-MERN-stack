@@ -9,7 +9,7 @@ const orderSchema = new mongoose.Schema({
     review: String,
     price_per_item: Number,
     delivery_fee: Number,
-})
+},{timestamps:true})
 
 const Order = mongoose.model('Order', orderSchema)
 

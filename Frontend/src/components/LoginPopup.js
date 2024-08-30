@@ -127,11 +127,11 @@ const LoginPopup = ({ open, handleClose }) => {
           {generalError && <p style={{ color: 'red' }}>{generalError}</p>} {/* Display general error */}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleLogin} color="primary">
-            Login
-          </Button>
           <Button onClick={handleSignupOpen} color="secondary">
             Sign Up
+          </Button>
+          <Button onClick={handleLogin} color="primary">
+            Login
           </Button>
         </DialogActions>
       </Dialog>
