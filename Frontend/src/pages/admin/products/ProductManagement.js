@@ -28,9 +28,10 @@ const ManageProducts = () => {
   const [colors, setColors] = useState([]);
   const [products, setProducts] = useState([]);
   const [selectedImage, setselectedImage] = useState("");
-  const [image,setImage] = useState();
+  const [image, setImage] = useState();
 
   const [error, setError] = useState(null); // State to store error messages
+  const [fillingErrors, setFillingErrors] = useState({}); // errors for not filling the fields
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -132,10 +133,36 @@ const ManageProducts = () => {
       ...productDetails,
       [name]: newValue,
     });
+
+    if (newValue) {
+      setFillingErrors({
+        ...fillingErrors,
+        [name]: "", // Clear the error for this field
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validation logic
+    const newErrors = {};
+    if (!productDetails.image) newErrors.image = "Image is required";
+    if (!productDetails.brand) newErrors.brand = "Brand is required";
+    if (!productDetails.model) newErrors.model = "Model is required";
+    if (!productDetails.color) newErrors.color = "Color is required";
+    if (!productDetails.price) newErrors.price = "Price is required";
+    if (!productDetails.category) newErrors.category = "Category is required";
+    if (!productDetails.quantity) newErrors.quantity = "Quantity is required";
+
+    // If there are errors, prevent submission and show errors
+    if (Object.keys(newErrors).length > 0) {
+      setFillingErrors(newErrors);
+      return;
+    }
+
+    // Clear errors if the validation passes
+    setFillingErrors({});
 
     const brandName =
       brands.find((brand) => brand._id === productDetails.brand)?.name || "";
@@ -290,18 +317,23 @@ const ManageProducts = () => {
   // };
 
   const handleImageChange = (e) => {
-    console.log(selectedImage);
     const file = e.target.files[0];
-
     if (file) {
-        setImage(file)
+      setImage(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setselectedImage(reader.result);
       };
       reader.readAsDataURL(file);
+  
+      // Update the productDetails state with the image file
+      setProductDetails((prevDetails) => ({
+        ...prevDetails,
+        image: file,
+      }));
     }
   };
+  
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -313,6 +345,12 @@ const ManageProducts = () => {
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={5} md={4}>
+
+            {fillingErrors.image && (
+              <Typography color="error" variant="body2">
+                {fillingErrors.image}
+              </Typography>
+            )}
               <Box
                 sx={{
                   width: "100%",
@@ -360,6 +398,7 @@ const ManageProducts = () => {
                         onChange={handleImageChange}
                       />
                     </Button>
+            
                   )}
                 </Box>
               </Box>
@@ -368,7 +407,11 @@ const ManageProducts = () => {
             <Grid item xs={12} sm={7} md={8}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
-                  <FormControl variant="outlined" fullWidth>
+                  <FormControl
+                    variant="outlined"
+                    fullWidth
+                    error={!!fillingErrors.brand}
+                  >
                     <InputLabel id="brand-label">Brand</InputLabel>
                     <Select
                       labelId="brand-label"
@@ -383,10 +426,20 @@ const ManageProducts = () => {
                         </MenuItem>
                       ))}
                     </Select>
+                    {fillingErrors.brand && (
+                      <Typography color="error" variant="body2">
+                        {fillingErrors.brand}
+                      </Typography>
+                    )}
                   </FormControl>
                 </Grid>
+
                 <Grid item xs={12} sm={6}>
-                  <FormControl variant="outlined" fullWidth>
+                  <FormControl
+                    variant="outlined"
+                    fullWidth
+                    error={!!fillingErrors.model}
+                  >
                     <InputLabel id="model-label">Model</InputLabel>
                     <Select
                       labelId="model-label"
@@ -401,10 +454,20 @@ const ManageProducts = () => {
                         </MenuItem>
                       ))}
                     </Select>
+                    {fillingErrors.model && (
+                      <Typography color="error" variant="body2">
+                        {fillingErrors.model}
+                      </Typography>
+                    )}
                   </FormControl>
                 </Grid>
+
                 <Grid item xs={12} sm={6}>
-                  <FormControl variant="outlined" fullWidth>
+                  <FormControl
+                    variant="outlined"
+                    fullWidth
+                    error={!!fillingErrors.color}
+                  >
                     <InputLabel id="color-label">Color</InputLabel>
                     <Select
                       labelId="color-label"
@@ -419,8 +482,14 @@ const ManageProducts = () => {
                         </MenuItem>
                       ))}
                     </Select>
+                    {fillingErrors.color && (
+                      <Typography color="error" variant="body2">
+                        {fillingErrors.color}
+                      </Typography>
+                    )}
                   </FormControl>
                 </Grid>
+
                 <Grid item xs={12} sm={6}>
                   <TextField
                     label="Price (LKR)"
@@ -440,10 +509,17 @@ const ManageProducts = () => {
                       inputMode: "decimal",
                     }}
                     fullWidth
+                    error={!!fillingErrors.price}
+                    helperText={fillingErrors.price}
                   />
                 </Grid>
+
                 <Grid item xs={12} sm={6}>
-                  <FormControl variant="outlined" fullWidth>
+                  <FormControl
+                    variant="outlined"
+                    fullWidth
+                    error={!!fillingErrors.category}
+                  >
                     <InputLabel id="category-label">Category</InputLabel>
                     <Select
                       labelId="category-label"
@@ -458,8 +534,14 @@ const ManageProducts = () => {
                         </MenuItem>
                       ))}
                     </Select>
+                    {fillingErrors.category && (
+                      <Typography color="error" variant="body2">
+                        {fillingErrors.category}
+                      </Typography>
+                    )}
                   </FormControl>
                 </Grid>
+
                 <Grid item xs={12} sm={6}>
                   <TextField
                     label="Quantity"
@@ -470,8 +552,11 @@ const ManageProducts = () => {
                     onChange={handleInputChange}
                     fullWidth
                     inputProps={{ min: 0 }}
+                    error={!!fillingErrors.quantity}
+                    helperText={fillingErrors.quantity}
                   />
                 </Grid>
+
                 <Grid item xs={12}>
                   <TextField
                     label="Description"
