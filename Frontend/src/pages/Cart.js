@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const Cart = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem('token');
 
   const initialCartItems = [
     { id: 1, name: 'Acoustic Guitar', quantity: 1, price: 500, imageUrl: 'https://via.placeholder.com/100', selected: true },
@@ -81,7 +82,12 @@ const Cart = () => {
   };
 
   const handleCheckout = () => {
-    alert('Proceeding to checkout...');
+    if(!token) {
+      alert("Please login or sign up first!");
+      return;
+    } else {
+      navigate('/checkout', { state: { cartItems: cartItems.filter(item => item.selected) } });
+    }
   };
 
   const calculateTotal = () => {

@@ -10,6 +10,7 @@ import ContactForm from './pages/GetInTouch';
 import Profile from './pages/Profile';
 import ProductListingPage from './pages/ProductListingPage';
 import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
 import Wishlist from './pages/Wishlist';
 import AdminDashboard from './pages/AdminDashboard';
 import { ThemeContextProvider } from './themecontext/ThemeContext';
@@ -47,6 +48,10 @@ const App = () => {
           <Route
             path="/cart"
             element={<AuthRoute component={Cart} />}
+          />
+          <Route
+            path="/checkout" 
+            element={<AuthRoute component={Checkout} />} 
           />
           <Route
             path="/wishlist"
