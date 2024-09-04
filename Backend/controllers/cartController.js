@@ -22,7 +22,8 @@ const addToCart = async (req, res) => {
         await Cart.create({
             product_id: product_id,
             customer_id: customer_id,
-            quantity: 1
+            quantity: 1,
+            status: false
         });
         return res.status(201).json({ message: 'Product added to cart' })
     } catch (error) {
@@ -32,8 +33,12 @@ const addToCart = async (req, res) => {
 }
 
 const getCartProducts = async (req, res) => {
+    const { id } = req.query
+    if (!id) {
+        return res.status(400).json({ message: "Requested parameters are empty" })
+    }
     try {
-        const products = await Cart.find()
+        const products = await Cart.find({ customer_id: id })
             .populate('product_id', ['title', 'price', 'img_card'])
             .sort({ createdAt: -1 })
         if (!products) {
@@ -52,7 +57,7 @@ const deleteProductFromCart = async (req, res) => {
         if (!cart) {
             return res.status(404).json({ message: 'Product not found in cart' })
         }
-        return res.status(200).json({ message: 'Product removed from cart' })
+        return res.status(200).json({ message: 'Success' })
     } catch (error) {
         return res.status(500).json({
             message: 'Internal Server Error', error: error.message
@@ -60,8 +65,36 @@ const deleteProductFromCart = async (req, res) => {
     }
 }
 
+const updateCartQtyStatus = async (req, res) => {
+    const { id, status, quantity } = req.body
+    try {
+        const item = await Cart.findByIdAndUpdate(id, { status, quantity }, { new: true })
+        if (!item) {
+            return res.status(404).json({ message: 'Product not found in cart' })
+        }
+        return res.status(200).json({ message: 'Success', products: item })
+    } catch (error) {
+        return res.status(500).json({ message: "Internal server error" })
+    }
+}
+
+const updateQuantity = async (req, res) => {
+    const { id, quantity } = req.body
+    try {
+        const item = await Cart.findByIdAndUpdate(id, { quantity: quantity }, { new: true })
+        if (!item) {
+            return res.status(404).json({ message: 'Product not found in cart' })
+        }
+        return res.status(200).json({ message: "Success" })
+    } catch (error) {
+        return res.status(500).json({ message: "Internal server error" })
+    }
+}
+
 module.exports = {
     addToCart,
     getCartProducts,
-    deleteProductFromCart
+    deleteProductFromCart,
+    updateCartQtyStatus,
+    updateQuantity
 }
