@@ -29,6 +29,7 @@ const middlewareRoutes = require("./routes/middlewearRoute");
 const colorRoutes = require("./routes/colorRoute");
 const productRoutes = require("./routes/productRoute");
 const cartRoutes = require('./routes/cartRoute')
+const wishlistRoutes = require('./routes/wishlistRoutes')
 
 // Middleware
 app.use(express.json()); // Converts incoming request bodies to JSON
@@ -65,6 +66,7 @@ app.use("/api", middlewareRoutes);
 app.use("/api/colors", colorRoutes);
 app.use("/api/products", productRoutes);
 app.use('/api/cart',cartRoutes)
+app.use('/api/wishlist', wishlistRoutes)
 
 // Connect to database
 mongoose
