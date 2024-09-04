@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography, Button, Divider, Grid, Paper, IconButton } from '@mui/material';
 import { AddShoppingCart as AddShoppingCartIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { jwtDecode } from 'jwt-decode'
 
 const WishlistPage = () => {
   const navigate = useNavigate();
@@ -12,10 +13,33 @@ const WishlistPage = () => {
     { id: 2, name: 'Bass Guitar', price: 900, imageUrl: 'https://via.placeholder.com/100' },
   ];
 
+  
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const decoded = jwtDecode(token)
     if (token) {
-      //
+      fetch(`/api/wishlist/?id=${decoded.id}`, { method: 'GET' })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message === "Success") {
+            const items = data.products.map(product => {
+              return {
+                id: product._id,
+                product_id: product.product_id._id,
+                name: product.product_id.title,
+                price: product.product_id.price,
+                imageUrl: 'http://localhost:4000/products/' + product.product_id.img_card,
+              };
+            });
+            console.log(items)
+            setWishlistItems(items)
+          } else {
+            alert(data.message)
+          }
+        })
+        .catch(error => {
+          console.error(error)
+        })
     }
     else {
       console.error("No token found, redirecting to login.");
