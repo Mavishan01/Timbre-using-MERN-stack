@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography, Button, Divider, Grid, Paper, IconButton, Checkbox } from '@mui/material';
 import { Add as AddIcon, Remove as RemoveIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { jwtDecode } from 'jwt-decode'
 
 const Cart = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
 
   const initialCartItems = [
     { id: 1, name: 'Acoustic Guitar', quantity: 1, price: 500, imageUrl: 'https://via.placeholder.com/100', selected: true },
@@ -16,8 +16,9 @@ const Cart = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      fetch('api/cart/', {
+    const decodedToken = jwtDecode(token);
+    if (token!==null) {
+      fetch(`api/cart?id=${decodedToken.id}`, {
         method: 'GET'
       })
         .then(response => response.json())
@@ -31,7 +32,7 @@ const Cart = () => {
                 quantity: product.quantity,
                 price: product.product_id.price,
                 imageUrl: 'http://localhost:4000/products/' + product.product_id.img_card,
-                status: false
+                selected: product.status
               };
             });
             console.log(items)
@@ -49,45 +50,82 @@ const Cart = () => {
     }
   }, [navigate]);
 
-  const handleQuantityChange = (id, increment) => {
-    setCartItems(prevItems =>
-      prevItems.map(item =>
-        item.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity + increment) }
-          : item
-      )
-    );
+  const handleQuantityChange = (id, increment, selected, qty) => {
+    if (selected) {
+      fetch('api/cart/updateQty',
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': "application/json" },
+          body: JSON.stringify({
+            id: id,
+            quantity: qty + increment
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message === "Success") {
+            setCartItems(prevItems =>
+              prevItems.map(item =>
+                item.id === id
+                  ? { ...item, quantity: Math.max(1, item.quantity + increment) }
+                  : item
+              )
+            );
+          }
+        })
+        .catch(error => console.error('Error:', error));
+    } else {
+      setCartItems(prevItems =>
+        prevItems.map(item =>
+          item.id === id
+            ? { ...item, quantity: Math.max(1, item.quantity + increment) }
+            : item
+        )
+      );
+    }
   };
 
   const handleDelete = (id) => {
     fetch(`api/cart/deleteProduct/${id}`, { method: "DELETE" })
       .then(response => response.json())
       .then(data => {
-        setCartItems(prevItems => {
-          return prevItems.filter(item => item.id !== id)
+        if (data.message === "Success") {
+          setCartItems(prevItems => {
+            return prevItems.filter(item => item.id !== id)
+          }
+          );
         }
-        );
       })
       .catch(error => console.error('Error:', error));
   };
 
-  const handleSelectChange = (id) => {
-    setCartItems(prevItems =>
-      prevItems.map(item =>
-        item.id === id
-          ? { ...item, selected: !item.selected }
-          : item
-      )
-    );
+  const handleSelectChange = (id, qty, status) => {
+    fetch(`api/cart/updateProduct`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: id, quantity: qty, status: !status })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message === 'Success') {
+          setCartItems(prevItems =>
+            prevItems.map(item =>
+              item.id === id
+                ? { ...item, selected: !item.selected }
+                : item
+            )
+          );
+        }
+      })
+      .catch(error => {
+        console.log(error.message)
+      })
   };
 
   const handleCheckout = () => {
-    if(!token) {
-      alert("Please login or sign up first!");
-      return;
-    } else {
-      navigate('/checkout', { state: { cartItems: cartItems.filter(item => item.selected) } });
-    }
+    const selectedItems = cartItems.filter(item => item.selected)
+    navigate('/checkout', { state: { selectedItems } })
   };
 
   const calculateTotal = () => {
@@ -113,11 +151,11 @@ const Cart = () => {
                 <Grid item xs={12} sm={3} md={2} sx={{ display: 'flex', alignItems: 'center' }}>
                   <Checkbox
                     checked={item.selected}
-                    onChange={() => handleSelectChange(item.id)}
+                    onChange={() => handleSelectChange(item.id, item.quantity, item.selected)}
                     color="primary"
                     sx={{ mr: 2 }}
                   />
-                  <img src={item.imageUrl} alt={item.name} style={{ width: '100%', borderRadius: '4px' }} />
+                  <img src={item.imageUrl} alt={item.name} style={{ width: '100%', height: '250px', borderRadius: '4px' }} />
                 </Grid>
                 <Grid item xs={12} sm={9} md={10}>
                   <Grid container spacing={2} alignItems="center">
@@ -128,7 +166,7 @@ const Cart = () => {
                     <Grid item xs={12} sm={6} container spacing={1} alignItems="center" justifyContent="flex-end">
                       <Grid item>
                         <IconButton
-                          onClick={() => handleQuantityChange(item.id, -1)}
+                          onClick={() => handleQuantityChange(item.id, -1, item.selected, item.quantity)}
                           disabled={item.quantity <= 1}
                           sx={{
                             border: '1px solid',
@@ -146,7 +184,7 @@ const Cart = () => {
                       </Grid>
                       <Grid item>
                         <IconButton
-                          onClick={() => handleQuantityChange(item.id, 1)}
+                          onClick={() => handleQuantityChange(item.id, 1, item.selected, item.quantity)}
                           sx={{
                             border: '1px solid',
                             borderRadius: '50%',
