@@ -170,7 +170,7 @@ const Navbar = () => {
             }}
             onClick={handleLoginClick}
           >
-            {token===null ? 'Login' : ''}
+            {token===null ? 'Login' : 'Login'}
             
           </Button>
           <IconButton

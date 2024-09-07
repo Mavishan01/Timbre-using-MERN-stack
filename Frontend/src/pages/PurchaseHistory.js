@@ -11,15 +11,22 @@ import {
 } from "@mui/material";
 import Invoice from "../components/Invoice";
 import { useLocation } from "react-router-dom";
+import { jwtDecode } from 'jwt-decode'
 
 const PurchaseHistory = () => {
-  const location = useLocation();
-  const userId = location.state?.userId;
+  // const location = useLocation();
+  // const userId = location.state?.userId;
+
   const [orders, setOrders] = useState([]);
   const [orderItems, setOrderItems] = useState([])
+
+  const token = localStorage.getItem("token");
+  const decodedToken = jwtDecode(token);
   useEffect(() => {
-    if (userId) {
-        fetch(`/api/invoice-items/purchase-history/${userId}`)
+    if (token!==null) {
+        fetch(`/api/invoice-items/purchase-history/${decodedToken.id}`,{
+        method: 'GET'
+        })
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -33,9 +40,9 @@ const PurchaseHistory = () => {
         .catch((error) => {
           console.error("Error fetching purchase history:", error);
         });
-      console.log("User ID:", userId);
+      console.log("User ID:", decodedToken.id);
     }
-  }, [userId]);
+  }, [decodedToken.id]);
 
 
   return (
