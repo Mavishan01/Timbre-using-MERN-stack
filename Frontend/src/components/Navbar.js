@@ -18,7 +18,6 @@ import Autocomplete from '@mui/material/Autocomplete';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import HistoryIcon from '@mui/icons-material/History';
 import toast from 'react-hot-toast';
-import { Toaster } from "react-hot-toast";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -60,7 +59,7 @@ const Navbar = () => {
 
   const handleCartClick = () => {
     if (!token) {
-      alert("Please login or sign up first!");
+      toast.error("Please login or sign up first!");
       return;
     } else {
       navigate("/cart");
@@ -69,7 +68,7 @@ const Navbar = () => {
 
   const handleHistoryClick = () => {
     if (!token) {
-      alert("Please login or sign up first!");
+      toast.error("Please login or sign up first!");
       return;
     } else {
       navigate("/purchaseHistory",{ state: { userId: "66d7e361a93ceecfe5a221a7" } });
@@ -78,7 +77,7 @@ const Navbar = () => {
 
   const handleFavoriteClick = () => {
     if (!token) {
-      alert("Please login or sign up first!");
+      toast.error("Please login or sign up first!");
       return;
     } else {
       navigate("/wishlist");
@@ -87,7 +86,7 @@ const Navbar = () => {
 
   const handleProfileClick = () => {
     if (!token) {
-      alert("Please login or sign up first!");
+      toast.error("Please login or sign up first!");
       return;
     } else {
       navigate("/profile");
