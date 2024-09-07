@@ -118,7 +118,9 @@ const ManageProducts = () => {
     price: "",
     category: "",
     quantity: "",
-    description: "", // Added description field
+    description: "",
+    image: ""
+    // Added description field
   });
 
   const [isEditing, setIsEditing] = useState(false); // State to track editing mode
@@ -191,25 +193,32 @@ const ManageProducts = () => {
       let response;
       if (isEditing) {
         // Update existing product
+        const formData = new FormData();
+        formData.append("image", image);
+        formData.append("title", newProduct.title);
+        formData.append("brand_id", newProduct.brand_id);
+        formData.append("model_id", newProduct.model_id);
+        formData.append("color_id", newProduct.color_id);
+        formData.append("price", newProduct.price);
+        formData.append("category_id", newProduct.category_id);
+        formData.append("quantity", newProduct.quantity);
+        formData.append("description", newProduct.description);
+        console.log(newProduct, image)
         response = await fetch(
           `/api/products/update/${products[editIndex]._id}`,
           {
             method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(newProduct),
+            body: formData,
           }
         );
-
         if (!response.ok) {
           throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
-
         const updatedProduct = await response.json();
         const updatedProducts = products.map((product, index) =>
-          index === editIndex ? updatedProduct : product
-        );
+          index === editIndex ? updatedProduct.product : product
+      );
+        console.log(updatedProduct)
 
         setProducts(updatedProducts);
         setIsEditing(false);
@@ -249,7 +258,9 @@ const ManageProducts = () => {
         category: "",
         quantity: "",
         description: "",
+        image: ""
       });
+      setselectedImage('')
       setError(null); // Clear any previous errors
     } catch (err) {
       console.error("Failed to add/update product:", err);
@@ -285,36 +296,26 @@ const ManageProducts = () => {
 
   const handleEdit = (index) => {
     const productToEdit = products[index];
+    console.log(productToEdit)
     // Find the correct names based on the IDs
-    const brandName =
-      brands.find((brand) => brand._id === productToEdit.brand)?.name || "";
-    const modelName =
-      models.find((model) => model._id === productToEdit.model)?.name || "";
-    const categoryName =
-      categories.find((category) => category._id === productToEdit.category)
-        ?.name || "";
-    const colorName =
-      colors.find((color) => color._id === productToEdit.color)?.name || "";
+    const brandId = productToEdit.brand_id?._id || "";
+    const modelId = productToEdit.model_id?._id || "";
+    const categoryId = productToEdit.category_id?._id || "";
+    const colorId = productToEdit.color_id?._id || "";
 
     // Set the product details with the names for display
     setProductDetails({
       ...productToEdit,
-      brand: brandName,
-      model: modelName,
-      category: categoryName,
-      color: colorName,
+      brand: brandId,
+      model: modelId,
+      category: categoryId,
+      color: colorId,
     });
     // setProductDetails(productToEdit);
     setIsEditing(true);
     setEditIndex(index);
   };
 
-  // const handleEdit = (index) => {
-  //     const productToEdit = products[index];
-  //     setProductDetails(productToEdit);  // Populate the form with the product details
-  //     setIsEditing(true);                // Set editing mode
-  //     setEditIndex(index);               // Store the index for saving later
-  // };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -325,7 +326,7 @@ const ManageProducts = () => {
         setselectedImage(reader.result);
       };
       reader.readAsDataURL(file);
-  
+
       // Update the productDetails state with the image file
       setProductDetails((prevDetails) => ({
         ...prevDetails,
@@ -333,7 +334,7 @@ const ManageProducts = () => {
       }));
     }
   };
-  
+
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -346,11 +347,11 @@ const ManageProducts = () => {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={5} md={4}>
 
-            {fillingErrors.image && (
-              <Typography color="error" variant="body2">
-                {fillingErrors.image}
-              </Typography>
-            )}
+              {fillingErrors.image && (
+                <Typography color="error" variant="body2">
+                  {fillingErrors.image}
+                </Typography>
+              )}
               <Box
                 sx={{
                   width: "100%",
@@ -398,7 +399,7 @@ const ManageProducts = () => {
                         onChange={handleImageChange}
                       />
                     </Button>
-            
+
                   )}
                 </Box>
               </Box>
@@ -591,6 +592,7 @@ const ManageProducts = () => {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
+                  <TableCell>Image</TableCell>
                   <TableCell>Title</TableCell>
                   <TableCell>Brand</TableCell>
                   <TableCell>Model</TableCell>
@@ -605,6 +607,13 @@ const ManageProducts = () => {
               <TableBody>
                 {products.map((product, index) => (
                   <TableRow key={index}>
+                    <TableCell>
+                      <img
+                        src={`http://localhost:4000/products/${product.img_card}`}
+                        alt={product._id}
+                        style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '4px' }}
+                      />
+                    </TableCell>
                     <TableCell>{product.title}</TableCell>
                     <TableCell>{product.brand_id?.name || "N/A"}</TableCell>
                     <TableCell>{product.model_id?.name || "N/A"}</TableCell>

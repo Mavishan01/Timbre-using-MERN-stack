@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, FormControl, InputLabel, MenuItem, Select, Checkbox, FormControlLabel, Typography, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-const FilterBox = () => {
+const FilterBox = ({ onSet, products, allProducts, initialCategoryId }) => {
   const [checkedItems, setCheckedItems] = useState([]);
   const [quantity, setQuantity] = useState([1, 10]);
   const [minPrice, setMinPrice] = useState('');
@@ -38,6 +38,26 @@ const FilterBox = () => {
         }
         const json = await response.json();
         setCategories(json);
+        if (initialCategoryId) {
+          const matchingCategory = json.find(category => category._id === initialCategoryId);
+          if (matchingCategory) {
+            setSelectedCategory(initialCategoryId);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch categories:', err);
+        setError(err.message);
+      }
+    };
+
+    const fetchColors = async () => {
+      try {
+        const response = await fetch("/api/colors");
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+        const json = await response.json();
+        setColors(json);
       } catch (err) {
         console.error('Failed to fetch categories:', err);
         setError(err.message);
@@ -46,17 +66,59 @@ const FilterBox = () => {
 
     fetchBrands();
     fetchCategories();
+    fetchColors()
   }, []);
 
+  const applyFilters = () => {
+    if (allProducts.length === 0) {
+      console.log('Products not loaded yet.');
+      return;
+    }
+  
+    let filteredProducts = allProducts;
+  
+    if (selectedCategory) {
+      filteredProducts = filteredProducts.filter(item => item.category_id._id === selectedCategory);
+    }
+  
+    if (checkedItems.length > 0) {
+      filteredProducts = filteredProducts.filter(item => checkedItems.includes(item.brand_id._id));
+    }
+  
+    if (minPrice || maxPrice) {
+      filteredProducts = filteredProducts.filter(item => {
+        const price = item.price;
+        return (!minPrice || price >= minPrice) && (!maxPrice || price <= maxPrice);
+      });
+    }
+  
+    if (selectedColors.length > 0) {
+      filteredProducts = filteredProducts.filter(item => selectedColors.includes(item.color_id._id));
+    }
+  
+    console.log('Filtered Products:', filteredProducts); // Verify filtered products here.
+    onSet(filteredProducts);
+  };
+  
+
+  useEffect(() => {
+    if (initialCategoryId) {
+      setSelectedCategory(initialCategoryId);
+    }
+  }, [initialCategoryId]);
+
+  useEffect(applyFilters, [checkedItems, selectedCategory, minPrice, maxPrice, selectedColors,allProducts]);
+
+
+
   const handleCategoryChange = (event) => {
-    const selectedCategory = event.target.value;
-    setSelectedCategory(selectedCategory);
-    navigate(`/products/${selectedCategory.toLowerCase()}`);
+    setSelectedCategory(event.target.value);
   };
 
   const handleCheckboxChange = (event) => {
     const { value } = event.target;
-    setCheckedItems((prev) => 
+
+    setCheckedItems((prev) =>
       prev.includes(value) ? prev.filter(item => item !== value) : [...prev, value]
     );
   };
@@ -70,15 +132,19 @@ const FilterBox = () => {
   };
 
   const handleColorChange = (color) => {
-    setSelectedColors((prev) => 
-      prev.includes(color) ? prev.filter(item => item !== color) : [...prev, color]
+    setSelectedColors((prev) =>
+      prev.includes(color)
+        ? prev.filter(item => item !== color)
+        : [...prev, color]
     );
+
   };
 
+
   return (
-    <Box sx={{ width: 250, padding: 2, borderRight: '1px solid #ccc' }}>
+    <Box sx={{ width: 400, padding: 2, borderRight: '1px solid #ccc' }}>
       <Typography variant="h6">Filters</Typography>
-      
+
       <FormControl fullWidth margin="normal">
         <InputLabel>Category</InputLabel>
         <Select
@@ -87,7 +153,7 @@ const FilterBox = () => {
           label="Category"
         >
           {categories.map((category) => (
-            <MenuItem key={category._id} value={category.name}>
+            <MenuItem key={category._id} value={category._id}>
               {category.name}
             </MenuItem>
           ))}
@@ -100,8 +166,8 @@ const FilterBox = () => {
           <FormControlLabel
             key={brand._id}
             control={
-              <Checkbox 
-                value={brand.name}
+              <Checkbox
+                value={brand._id}
                 onChange={handleCheckboxChange}
               />
             }
@@ -132,17 +198,17 @@ const FilterBox = () => {
       <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
         {colors.map((color) => (
           <Box
-            key={color}
+            key={color._id}
             sx={{
               width: 24,
               height: 24,
               borderRadius: '50%',
-              backgroundColor: color,
+              backgroundColor: color.hexcode,
               margin: 1,
               cursor: 'pointer',
-              border: selectedColors.includes(color) ? '2px solid black' : 'none'
+              border: selectedColors.includes(color._id) ? '2px solid black' : 'none'
             }}
-            onClick={() => handleColorChange(color)}
+            onClick={() => handleColorChange(color._id)}
           />
         ))}
       </Box>

@@ -176,6 +176,7 @@ const CategoryManagement = () => {
                   height: 50,
                   objectFit: "cover",
                   borderRadius: 1,
+                  borderColor:'black'
                 }}
               />
             )}
@@ -183,7 +184,7 @@ const CategoryManagement = () => {
           <Button
             onClick={handleAddCategory}
             variant="contained"
-            color="primary"
+            sx={{backgroundColor:'black' ,'&:hover': { backgroundColor: 'black', color: 'white' }}}
           >
             {editingIndex !== null ? "Update Category" : "Add Category"}
 

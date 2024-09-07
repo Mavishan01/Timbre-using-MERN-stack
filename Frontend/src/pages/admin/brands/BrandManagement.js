@@ -111,7 +111,7 @@ const BrandManagement = () => {
           fullWidth
           margin="normal"
         />
-        <Button onClick={handleAddBrand} variant="contained" color="primary">
+        <Button onClick={handleAddBrand} variant="contained" color="primary" sx={{backgroundColor:'black' ,'&:hover': { backgroundColor: 'black', color: 'white' }}}>
           {editingIndex !== null ? 'Update Brand' : 'Add Brand'}
         </Button>
       </Box>

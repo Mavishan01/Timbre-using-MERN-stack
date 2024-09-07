@@ -111,7 +111,7 @@ const ModelManagement = () => {
           fullWidth
           margin="normal"
         />
-        <Button onClick={handleAddModel} variant="contained" color="primary">
+        <Button onClick={handleAddModel} variant="contained" sx={{backgroundColor:'black' ,'&:hover': { backgroundColor: 'black', color: 'white' }}}>
           {editingIndex !== null ? 'Update Model' : 'Add Model'}
         </Button>
       </Box>

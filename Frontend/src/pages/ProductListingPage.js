@@ -1,73 +1,73 @@
-// ProductListingPage.js
 import React, { useEffect, useState } from 'react';
 import FilterBox from '../components/FilterBox';
-import { Box, Typography } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { Box, Typography, CircularProgress } from '@mui/material';
+import ProductCard from '../components/ProductCard';
+import { useLocation } from 'react-router-dom';
 
 const ProductListingPage = () => {
-  const { productType } = useParams(); // Get the category from the URL
   const [products, setProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const location = useLocation();
+  const initialCategoryId = location.state?.categoryId || '';
 
   useEffect(() => {
-    // Fetch products based on the category
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`/api/products?category=${productType}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch products');
-
-        }
+        const response = await fetch('/api/products/');
         const data = await response.json();
         setProducts(data);
+        setAllProducts(data);
+        setLoading(false);
       } catch (error) {
-        console.error(error.message);
+        console.error('Error:', error);
+        setLoading(false); 
       }
     };
-    
-    // const obj = {
-    //   "email":"ddd",
-    //   "password":"123"
-    // }
 
-    // fetch(`/api/products?category=${productType}`,{
-    //   method:"POST",
-    //   body:JSON.stringify(obj),
-    //   headers:"application/json"
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     setProducts(data)
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //   })
-    
     fetchProducts();
-  }, [productType]);
+  }, []);
+
+  const handleSetProducts = (filteredProducts) => {
+    setProducts(filteredProducts);
+  };
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <FilterBox />
-      <Box sx={{ flexGrow: 1, padding: 2 }}>
+    <Box sx={{ display: 'flex', height: '100vh' }}>
+      <Box sx={{ flexShrink: 0, width: 400, overflow: 'auto' }}>
+        <FilterBox
+          onSet={handleSetProducts}
+          products={products}
+          allProducts={allProducts}
+          initialCategoryId={initialCategoryId}
+        />
+      </Box>
+      <Box sx={{ flexGrow: 1, padding: 2, overflowY: 'auto' }}>
         <Typography variant="h4" component="h1" gutterBottom>
-          {productType.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+          All Products
         </Typography>
-        {/* Render product cards */}
-        <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
           {products.length > 0 ? (
             products.map((product) => (
-              <Box key={product._id} sx={{ width: '200px', margin: 2 }}>
-                {/* Example product card */}
-                <Box sx={{ border: '1px solid gray', borderRadius: '8px', padding: 2 }}>
-                  <Typography variant="h6">{product.name}</Typography>
-                  <Typography variant="body1">{`$${product.price}`}</Typography>
-                  <img src={product.image || 'https://via.placeholder.com/200'} alt={product.name} style={{ width: '100%', borderRadius: '4px' }} />
-                </Box>
-              </Box>
+              <ProductCard key={product._id} item={product} />
             ))
           ) : (
             <Typography variant="body1" color="text.secondary">
-              No products available for {productType}.
+              No products available.
             </Typography>
           )}
         </Box>

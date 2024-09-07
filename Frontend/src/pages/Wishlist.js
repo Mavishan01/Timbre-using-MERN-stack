@@ -12,8 +12,8 @@ const WishlistPage = () => {
     { id: 1, name: 'Classical Guitar', price: 600, imageUrl: 'https://via.placeholder.com/100' },
     { id: 2, name: 'Bass Guitar', price: 900, imageUrl: 'https://via.placeholder.com/100' },
   ];
+  const [wishlistItems, setWishlistItems] = useState(initialWishlistItems);
 
-  
   useEffect(() => {
     const token = localStorage.getItem("token");
     const decoded = jwtDecode(token)
@@ -45,17 +45,43 @@ const WishlistPage = () => {
       console.error("No token found, redirecting to login.");
       navigate("/");
     }
-  }, []);
+  }, [navigate]);
 
-  const [wishlistItems, setWishlistItems] = useState(initialWishlistItems);
 
   const handleAddToCart = (item) => {
-    // Logic to add the item to the cart
-    alert(`${item.name} added to cart`);
+    const token = localStorage.getItem('token')
+    const decodedToken = jwtDecode(token);
+    fetch('/api/cart/addToCart', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        product_id: item.product_id,
+        customer_id: decodedToken.id
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        alert(data.message)
+      })
+      .catch((error) => {
+        console.error('Error:', error.message);
+      })
   };
 
   const handleDelete = (id) => {
-    setWishlistItems(prevItems => prevItems.filter(item => item.id !== id));
+    fetch(`api/wishlist/deleteProduct/${id}`, { method: "DELETE" })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message === "Success") {
+          setWishlistItems(prevItems => {
+            return prevItems.filter(item => item.id !== id)
+          }
+          );
+        }
+      })
+      .catch(error => console.error('Error:', error));
   };
 
   return (

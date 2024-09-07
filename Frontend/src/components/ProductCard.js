@@ -9,13 +9,14 @@ import { Box, Button } from "@mui/material";
 import Ratings from "./Ratings";
 import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import toast from "react-hot-toast";
 
 
 export default function ProductCard({ item }) {
   const navigate = useNavigate(); // Initialize navigate function
 
   const handleCardClick = () => {
-    navigate('/productpage'); // Navigate to the generic ProductPage
+    navigate(`/productpage/${item._id}`, { state: { item } });
   };
 
   const handleAddToCart = () => {
@@ -33,16 +34,38 @@ export default function ProductCard({ item }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        alert(data.message)
+        toast.success(data.message)
       })
       .catch((error) => {
-        console.error('Error:', error.message);
+        toast.error('Error:', error.message);
+      })
+  }
+
+  const handleAddToWishlist = () => {
+    const token = localStorage.getItem('token')
+    const decodedToken = jwtDecode(token);
+    fetch('/api/wishlist/addToWishlist', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        product_id: item._id,
+        customer_id: decodedToken.id
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        toast.success(data.message)
+      })
+      .catch((error) => {
+        toast.error('Error:', error.message);
       })
   }
   return (
-    <Card sx={{ maxWidth: 345, boxShadow: 'none' }} onClick={handleCardClick} style={{ cursor: 'pointer' }}> {/* Add onClick handler */}
+    <Card sx={{ maxWidth: 300, my:2, maxHeight: 450, boxShadow: 'none' }}  style={{ cursor: 'pointer' }}> {/* Add onClick handler */}
 
-      <CardMedia
+      <CardMedia onClick={handleCardClick}
         component="img"
         height="194"
         image={`http://localhost:4000/products/${item?.img_card}`}
@@ -74,7 +97,7 @@ export default function ProductCard({ item }) {
             LKR {item?.price}.00
           </Typography>
           <IconButton aria-label="add to favorites" sx={{ marginLeft: 1 }}>
-            <FavoriteIcon />
+            <FavoriteIcon onClick={handleAddToWishlist} />
           </IconButton>
         </Box>
         <Ratings value={item?.ratings} />
@@ -94,7 +117,7 @@ export default function ProductCard({ item }) {
         }}>
           Add to Cart
         </Button>
-        <Button variant="outlined" sx={{ width: "100%", fontSize: '10px', color: 'green', borderColor: 'green', '&:hover': { backgroundColor: '#f2fff3', borderColor: 'green' } }}>
+        <Button onClick={handleCardClick} variant="outlined" sx={{ width: "100%", fontSize: '10px', color: 'green', borderColor: 'green', '&:hover': { backgroundColor: '#f2fff3', borderColor: 'green' } }}>
           Buy Now
         </Button>
       </Box>
