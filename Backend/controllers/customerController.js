@@ -10,19 +10,16 @@ const getCustomers = async (req, res) => {
 // Get one customer
 const getCustomerDetails = async (req, res) => {
   const { id } = req.params;
-  try{
+  try {
     const customer = await Customer.findById(id);
-    if(!customer)
-    {
+    if (!customer) {
       return res.status(400).json({ error: "Customer not found" });
     }
-    else
-    {
-      res.json(customer);
+    else {
+      res.status(200).json({customer: customer});
     }
   }
-  catch(err)
-  {
+  catch (err) {
     res.status(400).json({ error: err.message });
   }
 }
@@ -74,17 +71,16 @@ const updateCustomer = async (req, res) => {
   const customerID = req.params.id;
   const updateData = req.body;
 
-  try{
+  try {
     const updatedCustomer = await Customer.findByIdAndUpdate(
       customerID,
       updateData,
-      {new: true}
+      { new: true }
     );
 
-    if(!updateCustomer)
-    {
+    if (!updateCustomer) {
       console.log("Customer cannot found")
-      return res.status(400).json({message: 'Customer cannot found'})
+      return res.status(400).json({ message: 'Customer cannot found' })
     }
     console.log("Customer updated successfully")
 
@@ -94,11 +90,25 @@ const updateCustomer = async (req, res) => {
     });
 
   }
-  catch(error){
+  catch (error) {
     console.error('Error updating customer:', error);
     res.status(400).json({ message: 'Server error', error });
   }
 
+}
+
+const getAddress = async (req, res) => {
+  const { id } = req.query
+  try {
+    const customer = await Customer.findById(id)
+    if (!customer) {
+      return res.status(404).json({ message: 'Customer not found' })
+    }
+    res.status(200).json({ message: 'Success', customer: customer })
+  } catch (error) {
+    console.error('Error getting address:', error);
+    return res.status(500).json({ message: 'Internal server error' })
+  }
 }
 
 module.exports = {
@@ -107,4 +117,5 @@ module.exports = {
   loginCustomer,
   getCustomerDetails,
   updateCustomer,
+  getAddress
 };

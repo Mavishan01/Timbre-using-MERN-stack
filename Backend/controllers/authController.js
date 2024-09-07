@@ -21,6 +21,7 @@ const loginUser = async (req, res) => {
         if (!isMatch) return res.status(400).json({ message: "Invalid password credentials" });
 
         const token = jwt.sign({ id: customer._id, type: "Customer" }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        res.cookie('user_id', customer._id, { httpOnly: true, maxAge: 60 * 60 * 1000 });
         res.json({ customer, token , message: "Customer Login Success", status: true });
     } catch (err) {
         console.error("Error during login:", err);
@@ -55,6 +56,7 @@ const signupUser = async (req, res) => {
 
         // Generate a JWT token
         const token = jwt.sign({ id: newCustomer._id, email: newCustomer.email, type: 'Customer' }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.cookie('user_id', newCustomer._id, { httpOnly: true, maxAge: 60 * 60 * 1000 });
 
         // Return the customer data and token
         res.status(201).json({ customer: newCustomer, token, message: "Customer Signup Success", status: true });

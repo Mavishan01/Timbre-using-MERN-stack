@@ -10,7 +10,6 @@ const customerSchema = new mongoose.Schema({
     address: { type: String },
     mobile: { type: String },
     
-    
 },{timestamps:true});
 
 const Customer = mongoose.model('Customer', customerSchema);
