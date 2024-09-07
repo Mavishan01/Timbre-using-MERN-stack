@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
+const cors = require('cors');
 
 
 const app = express(); // Express app
@@ -15,8 +16,8 @@ const Customer = require("./models/customer");
 const Admin = require("./models/admin");
 const Cart = require("./models/cart");
 const Wishlist = require("./models/wishlist");
-const Order = require("./models/order");
 const Color = require("./models/color");
+const DS = require("./models/delivery_status");
 // const Auth = require("./models/user")
 
 // Importing routes
@@ -30,10 +31,13 @@ const colorRoutes = require("./routes/colorRoute");
 const productRoutes = require("./routes/productRoute");
 const cartRoutes = require('./routes/cartRoute')
 const wishlistRoutes = require('./routes/wishlistRoutes')
+const payHereRoute = require('./routes/paymentsRoute')
+const invoiceRoutes = require('./routes/invoiceRoute')
+const invoiceItemRoute = require('./routes/invoiceItemRoute')
 
 // Middleware
 app.use(express.json()); // Converts incoming request bodies to JSON
-
+app.use(cors());
 // Logging middleware
 app.use((req, res, next) => {
   console.log(req.path, req.method);
@@ -48,13 +52,13 @@ app.use(
   express.static(path.join(__dirname, "/src/uploads/categories"))
 );
 app.use(
-    "/products",
-    (req, res, next) => {
-      res.setHeader("Cache-Control", "no-cache");
-      next();
-    },
-    express.static(path.join(__dirname, "/src/uploads/products"))
-  );
+  "/products",
+  (req, res, next) => {
+    res.setHeader("Cache-Control", "no-cache");
+    next();
+  },
+  express.static(path.join(__dirname, "/src/uploads/products"))
+);
 
 // Routes
 app.use("/api/brands", brandRoutes);
@@ -65,8 +69,11 @@ app.use("/api/auth", authRoutes); // Add the auth routes for handling login, sig
 app.use("/api", middlewareRoutes);
 app.use("/api/colors", colorRoutes);
 app.use("/api/products", productRoutes);
-app.use('/api/cart',cartRoutes)
+app.use('/api/cart', cartRoutes)
 app.use('/api/wishlist', wishlistRoutes)
+app.use('/api/payments', payHereRoute);
+app.use('/api/invoices', invoiceRoutes);
+app.use('/api/invoice-items', invoiceItemRoute);
 
 // Connect to database
 mongoose
