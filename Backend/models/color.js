@@ -2,10 +2,10 @@ const mongoose = require('mongoose')
 
 const colorSchema = new mongoose.Schema({
     name: String,
-    hexcode: String
+    hex: String
     
     // course_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Course'},
-},{timestamps:true})
+})
 
 const Color = mongoose.model('Color', colorSchema)
 

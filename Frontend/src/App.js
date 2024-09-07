@@ -23,6 +23,7 @@ import ProductPage from './components/ProductPage';
 import Dashboard from './pages/admin/Dashboard';
 import ManageUsers from './pages/admin/ManageUsers';
 import ProductManagement from './pages/admin/products/ProductManagement';
+import ColorManagement from './pages/admin/colors/ColorManagament';
 import Orders from './pages/admin/Orders';
 import CategoryManagement from './pages/admin/categories/CategoryManagement';
 import BrandManagement from './pages/admin/brands/BrandManagement';
@@ -72,6 +73,7 @@ const App = () => {
               <Route path="/admin/landing" element={<Dashboard />} />
               <Route path="/admin/manage-users" element={<ManageUsers />} />
               <Route path="/admin/manage-products" element={<ProductManagement />} />
+              <Route path="admin/manage-colors" element={<ColorManagement/>}/>
               <Route path="/admin/orders" element={<Orders />} />
               <Route path="/admin/orders/:id" element={<OrderDetails />} />
               <Route path="/admin/categories" element={<CategoryManagement />} />

@@ -38,6 +38,9 @@ const AdminPage = () => {
           <ListItem component={Link} to="/admin/manage-products" button>
             <ListItemText primary="Products" />
           </ListItem>
+          <ListItem component={Link} to="/admin/manage-colors" button>
+            <ListItemText primary="Colors" />
+          </ListItem>
           <ListItem component={Link} to="/admin/orders" button>
             <ListItemText primary="Orders" />
           </ListItem>

@@ -203,7 +203,7 @@ const FilterBox = ({ onSet, products, allProducts, initialCategoryId }) => {
               width: 24,
               height: 24,
               borderRadius: '50%',
-              backgroundColor: color.hexcode,
+              backgroundColor: color.hex,
               margin: 1,
               cursor: 'pointer',
               border: selectedColors.includes(color._id) ? '2px solid black' : 'none'

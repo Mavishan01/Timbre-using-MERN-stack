@@ -7,6 +7,7 @@ import { styled } from '@mui/material/styles';
 import Dashboard from './admin/Dashboard';
 import ManageUsers from './admin/ManageUsers';
 import ProductManagement from './admin/products/ProductManagement'; // Updated import
+import ColorManagement from './admin/colors/ColorManagament';
 import Orders from './admin/Orders';
 import CategoryManagement from './admin/categories/CategoryManagement'; // Updated import
 import BrandManagement from './admin/brands/BrandManagement'; // Updated import
@@ -38,6 +39,9 @@ const AdminPage = () => {
           <ListItem component={Link} to="/admin/manage-products" button>
             <ListItemText primary="Products" />
           </ListItem>
+          <ListItem component={Link} to="/admin/manage-colors" button>
+            <ListItemText primary="Colors" />
+          </ListItem>
           <ListItem component={Link} to="/admin/orders" button>
             <ListItemText primary="Orders" />
           </ListItem>
@@ -64,6 +68,7 @@ const AdminPage = () => {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="manage-users" element={<ManageUsers />} />
           <Route path="manage-products" element={<ProductManagement />} /> {/* Updated route */}
+          <Route path="manage-colors" element={ColorManagement}/>
           <Route path="orders" element={<Orders />} />
           <Route path="categories" element={<CategoryManagement />} /> {/* Updated route */}
           <Route path="brands" element={<BrandManagement />} /> {/* Updated route */}
