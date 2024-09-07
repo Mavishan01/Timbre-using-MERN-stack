@@ -13,21 +13,14 @@ import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
-import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+import {jwtDecode} from "jwt-decode";
+import toast from "react-hot-toast";
 
 const Profile = () => {
   const [editMode, setEditMode] = useState(false);
-  // const [user, setUser] = useState(null);
-  const [profile, setProfile] = useState({
-    customerId: "CUST12345", // Sample Customer ID
-    nic: "982745678V",        // Sample NIC
-    first_name: "John",
-    last_name: "Doe",
-    email: "johndoe@example.com",
-    mobile: "123-456-7890",
-    address: "123 Music Street, Melody City, NY",
-  });
+  const [profile, setProfile] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -37,14 +30,14 @@ const Profile = () => {
         const customerId = decodedToken.id;
         fetchCustomerDetails(customerId);
       } catch (error) {
-        console.error("Invalid token:", error);
+        toast.error("Invalid token:", error);
+        navigate("/");
       }
-    }
-    else {
-      console.error("No token found, redirecting to login.");
+    } else {
+      toast.error("No token found, redirecting to login.");
       navigate("/");
     }
-  }, []);
+  }, [navigate]);
 
   const fetchCustomerDetails = async (customerId) => {
     try {
@@ -53,15 +46,12 @@ const Profile = () => {
         throw new Error(`Failed to load customer details: ${response.statusText}`);
       }
       const data = await response.json();
-      setProfile(data);
-
+      setProfile(data.customer || {});
+    } catch (error) {
+      toast.error("Error fetching customer details:", error);
     }
-    catch (error) {
-      console.error("Error fetching customer details:", error);
-    }
-  }
+  };
 
-  const navigate = useNavigate();
   const handleChange = (e) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
   };
@@ -74,11 +64,10 @@ const Profile = () => {
     setEditMode(false);
   };
 
-  const handleSave = async (customerId) => {
+  const handleSave = async () => {
     try {
       const token = localStorage.getItem("token");
       if (token) {
-
         const decodedToken = jwtDecode(token);
         const customerId = decodedToken.id;
 
@@ -86,20 +75,20 @@ const Profile = () => {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
           },
           body: JSON.stringify(profile),
         });
 
         if (response.ok) {
-          alert("Profile updated successfully!");
+          toast.success("Profile updated successfully!");
           setEditMode(false);
         } else {
           throw new Error("Failed to update profile.");
         }
-      }   
-    }
-    catch (error) {
-      console.error("Error updating profile:", error);
+      }
+    } catch (error) {
+      toast.error("Error updating profile:", error);
       alert("Error updating profile. Please try again.");
     }
   };
@@ -108,6 +97,10 @@ const Profile = () => {
     localStorage.removeItem('token');
     navigate("/");
   };
+
+  if (!profile) {
+    return <Typography>Loading...</Typography>;
+  }
 
   return (
     <Container
@@ -128,7 +121,7 @@ const Profile = () => {
         marginBottom={4}
       >
         <Avatar
-          alt={`${profile.first_name} ${profile.last_name}`}
+          alt={`${profile.first_name || ""} ${profile.last_name || ""}`}
           sx={{
             width: 120,
             height: 120,
@@ -136,15 +129,15 @@ const Profile = () => {
             marginBottom: { xs: 2, sm: 0 },
           }}
         >
-          {profile.first_name[0]}
-          {profile.last_name[0]}
+          {profile.first_name ? profile.first_name[0] : ""}
+          {profile.last_name ? profile.last_name[0] : ""}
         </Avatar>
         <Box>
           <Typography variant="h4" component="div">
-            {profile.first_name} {profile.last_name}
+            {profile.first_name || ""} {profile.last_name || ""}
           </Typography>
           <Typography variant="h6" color="text.secondary">
-            Customer ID: {profile.customerId}
+            Customer ID: {profile._id || ""}
           </Typography>
         </Box>
       </Box>
@@ -154,7 +147,7 @@ const Profile = () => {
             fullWidth
             label="First Name"
             name="first_name"
-            value={profile.first_name}
+            value={profile.first_name || ""}
             onChange={handleChange}
             disabled={!editMode}
             variant="outlined"
@@ -166,7 +159,7 @@ const Profile = () => {
             fullWidth
             label="Last Name"
             name="last_name"
-            value={profile.last_name}
+            value={profile.last_name || ""}
             onChange={handleChange}
             disabled={!editMode}
             variant="outlined"
@@ -178,7 +171,7 @@ const Profile = () => {
             fullWidth
             label="Address"
             name="address"
-            value={profile.address}
+            value={profile.address || ""}
             onChange={handleChange}
             disabled={!editMode}
             variant="outlined"
@@ -189,8 +182,8 @@ const Profile = () => {
           <TextField
             fullWidth
             label="Phone"
-            name="phone"
-            value={profile.mobile}
+            name="mobile"
+            value={profile.mobile || ""}
             onChange={handleChange}
             disabled={!editMode}
             variant="outlined"
@@ -202,7 +195,7 @@ const Profile = () => {
             fullWidth
             label="Email"
             name="email"
-            value={profile.email}
+            value={profile.email || ""}
             onChange={handleChange}
             disabled={!editMode}
             variant="outlined"

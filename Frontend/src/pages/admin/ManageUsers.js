@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@mui/material';
 import { ToggleOff, ToggleOn } from '@mui/icons-material';
 import AdminDashboard from '../AdminDashboard';
@@ -17,49 +17,56 @@ const ManageUsers = () => {
     setUsers(updatedUsers);
   };
 
+  useEffect(() => {
+    fetch('/api/customers/')
+      .then(response => response.json())
+      .then(data => setUsers(data))
+      .catch(error => console.error(error));
+  }, []);
+
   return (
     <Box sx={{ display: 'flex' }}>
       <AdminDashboard />
       <Box sx={{ flexGrow: 1, padding: 2 }}>
 
-      <Typography variant="h4" gutterBottom>
-        Manage Users
-      </Typography>
-
-      {/* Display the list of users */}
-      <Box sx={{ mt: 4 }}>
-        <Typography variant="h5" gutterBottom>
-          User List
+        <Typography variant="h4" gutterBottom>
+          Manage Users
         </Typography>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell align="right">Status</TableCell>
-                <TableCell align="right">Actions</TableCell> {/* Added Actions column */}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {users.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell>{user.name}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell align="right">
-                    {user.active ? 'Active' : 'Inactive'}
-                  </TableCell>
-                  <TableCell align="right">
-                    <IconButton color={user.active ? 'primary' : 'default'} onClick={() => handleToggleActive(user.id)}>
-                      {user.active ? <ToggleOff /> : <ToggleOn />}
-                    </IconButton>
-                  </TableCell>
+
+        {/* Display the list of users */}
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="h5" gutterBottom>
+            User List
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Email</TableCell>
+                  <TableCell>Address</TableCell>
+                  <TableCell>Mobile</TableCell>
+                  <TableCell>Registered Date</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
+              </TableHead>
+              <TableBody>
+                {users.map((user) => (
+                  <TableRow key={user.id}>
+                    <TableCell>{user.first_name} {user.last_name}</TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{user.address}</TableCell>
+                    <TableCell>{user.mobile}</TableCell>
+                    <TableCell>{new Date(user.createdAt).toLocaleString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
       </Box>
     </Box>
   );
