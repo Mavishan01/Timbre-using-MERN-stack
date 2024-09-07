@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const { getProducts, createProduct, updateProduct, deleteProduct, getNewArrivals, mostRatedProducts, getProductsByCategory, getProductsByBrands } = require("../controllers/productController");
+const { getProducts, createProduct, updateProduct, deleteProduct, getNewArrivals, mostRatedProducts, getProductsByCategory, getProductsByBrands, getProductCount } = require("../controllers/productController");
 const createUploadMiddleware = require("../middlewear/uploadMiddleware");
 
 
@@ -21,5 +21,7 @@ router.get("/new-arrivals", getNewArrivals)
 router.get("/most-rated", mostRatedProducts)
 router.get("/by-category/:id", getProductsByCategory)
 router.post('/by-brands/', getProductsByBrands)
+
+router.get('/get/productCount', getProductCount)
 
 module.exports = router;

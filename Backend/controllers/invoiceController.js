@@ -15,7 +15,7 @@ const saveInvoice = async (req, res) => {
         });
         const savedInvoice = await newInvoice.save({ session });
         const invoiceItems = items.map((item) => ({
-            product_id: item.product_id,
+            order_id: item.order_id,
             qty: item.qty,
             invoice_id: savedInvoice._id,
         }));
@@ -78,8 +78,20 @@ const updateDeliveryStatus = async (req, res) => {
     }
 }
 
+const getOrderCount = async (req, res) => {
+    try {
+      const orderCount = await Invoice.countDocuments(); // Get total count
+      console.log('order count:', orderCount); 
+      res.status(200).json({ count: orderCount });
+    } catch (error) {
+      console.error('Error getting order count:', error); // Log any error
+      res.status(500).json({ error: 'Error getting order count' });
+    }
+  };
+
 module.exports = {
     getAllInvoice,
     saveInvoice,
-    updateDeliveryStatus
+    updateDeliveryStatus,
+    getOrderCount
 };
