@@ -29,7 +29,7 @@ const AdminPage = () => {
           Admin Menu
         </Typography>
         <List>
-          <ListItem component={Link} to="/admin/dashboard" button>
+          <ListItem component={Link} to="/admin/landing" button>
             <ListItemText primary="Dashboard" />
           </ListItem>
           <ListItem component={Link} to="/admin/manage-users" button>

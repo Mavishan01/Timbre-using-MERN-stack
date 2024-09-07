@@ -69,7 +69,7 @@ const App = () => {
 
               {/* Admin Dashboard */}
               <Route path="/admin/dashboard" element={<AdminRoute component={AdminDashboard} />} />
-              <Route path="/admin/dashboard" element={<Dashboard />} />
+              <Route path="/admin/landing" element={<Dashboard />} />
               <Route path="/admin/manage-users" element={<ManageUsers />} />
               <Route path="/admin/manage-products" element={<ProductManagement />} />
               <Route path="/admin/orders" element={<Orders />} />

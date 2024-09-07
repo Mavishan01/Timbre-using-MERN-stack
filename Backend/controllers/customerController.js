@@ -111,11 +111,24 @@ const getAddress = async (req, res) => {
   }
 }
 
+const getCustomerCount = async (req, res) => {
+  try {
+    const customerCount = await Customer.countDocuments(); // Get total count
+    console.log('Customer count:', customerCount); // Log the customer count for debugging
+    res.status(200).json({ count: customerCount });
+  } catch (error) {
+    console.error('Error getting customer count:', error); // Log any error
+    res.status(500).json({ error: 'Error getting customer count' });
+  }
+};
+
 module.exports = {
   getCustomers,
   createCustomer,
   loginCustomer,
   getCustomerDetails,
   updateCustomer,
-  getAddress
+  getAddress,
+  getCustomerCount, // Export the new function
 };
+

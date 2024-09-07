@@ -6,12 +6,13 @@ const {
     loginCustomer,
     getCustomerDetails,
     updateCustomer,
-    getAddress
+    getAddress,
+    getCustomerCount
 } = require("../controllers/customerController");
 
 // Get all customers
 router.get("/", getCustomers);
-router.get("/address", getAddress)
+router.get("/address", getAddress);
 
 // Get customer using an ID
 router.get("/:id", getCustomerDetails);
@@ -23,5 +24,7 @@ router.put("/update/:id", updateCustomer);
 
 // POST to login a customer
 // router.post("/login", loginCustomer);
+
+router.get('/get/customerCount', getCustomerCount);  // New route for getting customer count
 
 module.exports = router;
