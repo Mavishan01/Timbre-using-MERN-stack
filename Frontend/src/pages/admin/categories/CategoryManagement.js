@@ -15,7 +15,6 @@ import {
 } from "@mui/material";
 import { Edit, Delete, Image as ImageIcon } from "@mui/icons-material";
 import AdminDashboard from "../../AdminDashboard";
-import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import toast from 'react-hot-toast';
 
 const CategoryManagement = () => {
@@ -25,6 +24,7 @@ const CategoryManagement = () => {
   const [editingIndex, setEditingIndex] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
   const [image, setImage] = useState("");
+  const [errors, setErrors] = useState({ name: "", image: "" });
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -40,9 +40,31 @@ const CategoryManagement = () => {
     fetchCategories();
   }, []);
 
-  
+  const validate = () => {
+    let isValid = true;
+    let errors = { name: "", image: "" };
+
+    // Validate category name
+    if (!categoryName.trim()) {
+      errors.name = "Category name is required";
+      isValid = false;
+    }
+
+    // Validate image file size (less than 1MB)
+    if (image && image.size > 1048576) {
+      errors.image = "Image size should be less than 1MB";
+      isValid = false;
+    }
+
+    setErrors(errors);
+    return isValid;
+  };
 
   const handleAddCategory = async () => {
+    if (!validate()) {
+      return;
+    }
+
     const categoryData = { name: categoryName, image: categoryImage };
 
     if (editingIndex !== null) {
@@ -51,26 +73,29 @@ const CategoryManagement = () => {
       const formData = new FormData();
       formData.append("name", categoryName);
       formData.append("image", image);
-      // Perform the update
-      const response = await fetch(
-        `/api/categories/update/${categoryToUpdate._id}`,
-        {
-          method: "PUT",
-          body: formData,
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Error updating category");
-      }
-      const updatedCategory = await response.json();
-      const updatedCategories = categories.map((category, index) =>
-        index === editingIndex ? updatedCategory : category
-      );
-      setCategories(updatedCategories);
-      setEditingIndex(null);
-      window.location.reload();
-      toast.success("Category Updated")
 
+      try {
+        const response = await fetch(
+          `/api/categories/update/${categoryToUpdate._id}`,
+          {
+            method: "PUT",
+            body: formData,
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Error updating category");
+        }
+        const updatedCategory = await response.json();
+        const updatedCategories = categories.map((category, index) =>
+          index === editingIndex ? updatedCategory : category
+        );
+        setCategories(updatedCategories);
+        setEditingIndex(null);
+        window.location.reload();
+        toast.success("Category Updated");
+      } catch (error) {
+        console.error("Error updating category:", error);
+      }
     } else {
       try {
         const formData = new FormData();
@@ -78,17 +103,14 @@ const CategoryManagement = () => {
         formData.append("image", image);
         const response = await fetch("/api/categories", {
           method: "POST",
-
           body: formData,
         });
         if (!response.ok) {
           throw new Error("Error creating category");
-        } else {
-          const newCategory = await response.json();
-          setCategories([...categories, newCategory]);
-          toast.success("New Brand Added")
-
         }
+        const newCategory = await response.json();
+        setCategories([...categories, newCategory]);
+        toast.success("New Category Added");
       } catch (error) {
         console.error("Error adding category:", error);
       }
@@ -109,7 +131,6 @@ const CategoryManagement = () => {
   const handleDeleteCategory = async (index) => {
     const categoryToDelete = categories[index];
     try {
-      // Send DELETE request to the server
       const response = await fetch(
         `/api/categories/delete/${categoryToDelete._id}`,
         {
@@ -119,7 +140,6 @@ const CategoryManagement = () => {
       if (!response.ok) {
         throw new Error("Error deleting category");
       }
-      // Remove category from local state if the deletion is successful
       setCategories(categories.filter((_, i) => i !== index));
     } catch (error) {
       console.error("Error deleting category:", error);
@@ -128,16 +148,21 @@ const CategoryManagement = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    setImage(file)
 
     if (file) {
+      if (file.size > 1048576) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          image: "Image size should be less than 1MB",
+        }));
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = () => {
-        console.log(reader.result)
         setImagePreview(reader.result);
-        // setCategoryImage(reader.result);
-        setImage(file)
-
+        setImage(file);
+        setErrors((prevErrors) => ({ ...prevErrors, image: "" }));
       };
       reader.readAsDataURL(file);
     }
@@ -157,6 +182,8 @@ const CategoryManagement = () => {
             onChange={(e) => setCategoryName(e.target.value)}
             fullWidth
             margin="normal"
+            error={Boolean(errors.name)}
+            helperText={errors.name}
           />
           <Box sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}>
             <Button
@@ -183,18 +210,25 @@ const CategoryManagement = () => {
                   height: 50,
                   objectFit: "cover",
                   borderRadius: 1,
-                  borderColor:'black'
+                  borderColor: "black",
                 }}
               />
             )}
           </Box>
+          {errors.image && (
+            <Typography variant="body2" color="error" sx={{ marginBottom: 2 }}>
+              {errors.image}
+            </Typography>
+          )}
           <Button
             onClick={handleAddCategory}
             variant="contained"
-            sx={{backgroundColor:'black' ,'&:hover': { backgroundColor: 'black', color: 'white' }}}
+            sx={{
+              backgroundColor: "black",
+              "&:hover": { backgroundColor: "black", color: "white" },
+            }}
           >
             {editingIndex !== null ? "Update Category" : "Add Category"}
-
           </Button>
         </Box>
 
