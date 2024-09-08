@@ -89,6 +89,11 @@ const ProductPage = () => {
   };
 
   const handleCheckout = () => {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      toast.error("Please login or sign up first!");
+      return;
+    }
     console.log(item)
     const selectedItems = [{
       id: item._id,
@@ -113,6 +118,10 @@ const ProductPage = () => {
 
   const handleAddToCart = () => {
     const token = localStorage.getItem('token')
+    if (!token) {
+      toast.error("Please login or sign up first!");
+      return;
+    }
     const decodedToken = jwtDecode(token);
     fetch('/api/cart/addToCart', {
       method: 'POST',
@@ -135,6 +144,10 @@ const ProductPage = () => {
 
   const handleAddToWishlist = () => {
     const token = localStorage.getItem('token')
+    if (!token) {
+      toast.error("Please login or sign up first!");
+      return;
+    }
     const decodedToken = jwtDecode(token);
     fetch('/api/wishlist/addToWishlist', {
       method: 'POST',

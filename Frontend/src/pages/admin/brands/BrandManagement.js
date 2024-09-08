@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography, Button, TextField, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, Paper, IconButton } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
 import AdminDashboard from '../../AdminDashboard';
+import toast from 'react-hot-toast';
+
 
 const BrandManagement = () => {
   const [brands, setBrands] = useState([]);
@@ -23,6 +25,18 @@ const BrandManagement = () => {
   }, []);
 
   const handleAddBrand = async () => {
+    // Validate the input
+    if (!brandName.trim()) {
+      toast.error('Brand name cannot be empty');
+      return;
+    }
+
+    // Check for duplicate brand
+    const isDuplicate = brands.some(brand => brand.name.toLowerCase() === brandName.toLowerCase());
+    if (isDuplicate && editingIndex === null) { // Only check for duplicates if adding, not updating
+      toast.error('Brand name already exists');
+      return;
+    }
     const brandData = { name: brandName};
 
     if (editingIndex !== null) {
@@ -49,6 +63,8 @@ const BrandManagement = () => {
       setBrands(updatedBrands);
       setEditingIndex(null);
       window.location.reload()
+      toast.success("Brand Updated")
+
     } else {
       const newBrand = { name: brandName};
 
@@ -63,6 +79,9 @@ const BrandManagement = () => {
 
         const data = await response.json();
         setBrands([...brands, data]);
+        window.location.reload();
+        toast.success("New Brand Added")
+
       } catch (error) {
         console.error('Error adding brands:', error);
       }

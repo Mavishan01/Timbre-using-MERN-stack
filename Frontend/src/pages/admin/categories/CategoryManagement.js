@@ -16,6 +16,7 @@ import {
 import { Edit, Delete, Image as ImageIcon } from "@mui/icons-material";
 import AdminDashboard from "../../AdminDashboard";
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import toast from 'react-hot-toast';
 
 const CategoryManagement = () => {
   const [categories, setCategories] = useState([]);
@@ -38,6 +39,8 @@ const CategoryManagement = () => {
 
     fetchCategories();
   }, []);
+
+  
 
   const handleAddCategory = async () => {
     const categoryData = { name: categoryName, image: categoryImage };
@@ -66,6 +69,8 @@ const CategoryManagement = () => {
       setCategories(updatedCategories);
       setEditingIndex(null);
       window.location.reload();
+      toast.success("Category Updated")
+
     } else {
       try {
         const formData = new FormData();
@@ -81,6 +86,8 @@ const CategoryManagement = () => {
         } else {
           const newCategory = await response.json();
           setCategories([...categories, newCategory]);
+          toast.success("New Brand Added")
+
         }
       } catch (error) {
         console.error("Error adding category:", error);

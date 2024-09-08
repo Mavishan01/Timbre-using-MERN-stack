@@ -4,6 +4,8 @@ import { Box, Typography, Button, Divider, Grid, Paper, IconButton } from '@mui/
 import { AddShoppingCart as AddShoppingCartIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { jwtDecode } from 'jwt-decode'
+import toast from 'react-hot-toast';
+
 
 const WishlistPage = () => {
   const navigate = useNavigate();
@@ -63,7 +65,7 @@ const WishlistPage = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        alert(data.message)
+      toast.success(data.message)
       })
       .catch((error) => {
         console.error('Error:', error.message);
