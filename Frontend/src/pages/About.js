@@ -31,7 +31,7 @@ const About = () => {
             <CardMedia
               component="img"
               height="200"
-              image="https://example.com/guitar.jpg"
+              image="https://images.pexels.com/photos/1407322/pexels-photo-1407322.jpeg?auto=compress&cs=tinysrgb&w=800"
               alt="Guitar"
             />
             <CardContent>
@@ -51,7 +51,7 @@ const About = () => {
             <CardMedia
               component="img"
               height="200"
-              image="https://example.com/violin.jpg"
+              image="https://images.pexels.com/photos/6671709/pexels-photo-6671709.jpeg?auto=compress&cs=tinysrgb&w=800"
               alt="Violin"
             />
             <CardContent>
@@ -71,7 +71,7 @@ const About = () => {
             <CardMedia
               component="img"
               height="200"
-              image="https://example.com/drum.jpg"
+              image="https://images.pexels.com/photos/995301/pexels-photo-995301.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2g"
               alt="Drum"
             />
             <CardContent>
