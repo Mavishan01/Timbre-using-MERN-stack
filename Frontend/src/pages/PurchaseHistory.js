@@ -9,7 +9,6 @@ import {
   CardMedia,
   Rating,
 } from "@mui/material";
-import Invoice from "../components/Invoice";
 import { useLocation } from "react-router-dom";
 import { jwtDecode } from 'jwt-decode'
 
@@ -47,7 +46,6 @@ const PurchaseHistory = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Invoice />
       <Typography variant="h4" gutterBottom>
         Purchasing History
       </Typography>
@@ -79,20 +77,20 @@ const PurchaseHistory = () => {
                   <CardMedia
                     component="img"
                     sx={{height:'200px',width:'200px',borderRadius:5,my:1}}
-                    image={`http://localhost:4000/products/${item.product_id.img_card}`}
-                    alt={item.product_id.title}
+                    image={`http://localhost:4000/products/${item.product_id?.img_card}`}
+                    alt={item.product_id?.title}
                   />
                 </Grid>
                 <Grid item xs={12} sm={10}>
                   <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                      {item.product_id.title}
+                      {item.product_id?.title}
                     </Typography>
                     <Typography variant="body1">
-                      Rs. {item.product_id.price}
+                      Rs. {item.product_id?.price}
                     </Typography>
                     <Typography variant="body2">
-                      Quantity: {item.qty}
+                      Quantity: {item?.qty}
                     </Typography>
                     <Box
                       sx={{
@@ -102,7 +100,7 @@ const PurchaseHistory = () => {
                       }}
                     >
                       <Typography variant="body1" sx={{ marginRight: 1 }}>
-                        Total: Rs. {item.product_id.price}
+                        Total: Rs. {item.product_id?.price}
                       </Typography>
                     </Box>
                   </Box>

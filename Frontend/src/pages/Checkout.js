@@ -3,6 +3,7 @@ import { Box, Typography, Paper, Grid, Button, Divider } from '@mui/material';
 import { useNavigate, useLocation } from "react-router-dom";
 import { jwtDecode } from 'jwt-decode'
 import toast from 'react-hot-toast';
+// import InvoiceItem from '../../../Backend/models/invoice_item';
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ const Checkout = () => {
       setAmount(calculateTotal());
   }, [cartItems]);
 
-  const createInvoice = async () => {
+  const createInvoice = async (payment) => {
     try {
       const response = await fetch("api/invoices/createInvoice", {
         method: "POST",
@@ -49,9 +50,22 @@ const Checkout = () => {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       toast.success('Order placed successfully! Invoice created.');
-      navigate('/purchaseHistory', { state: { userId: customer?._id } });
+      const responseData = await response.json();
+      const newObj = {
+        invoice_id: responseData.invoice.invoice_id,
+        order_id: responseData.invoice.orderId,
+        total: responseData.invoice.total,
+        cus_name: payment.first_name + " "+ payment.last_name,
+        cus_address:payment.address,
+        cus_email: payment.email,
+        cus_phone: payment.phone,
+        InvoiceItems: responseData.invoiceItems|| [],
+      }
+      console.log(newObj)
+      navigate('/invoice', { state: {newObj} });
     } catch (error) {
-      toast.error("Error creating invoice:", error);
+      console.error("Error creating invoice:", error); // Logs the error to the console.
+      toast.error("Failed to create invoice. Please try again."); // Display user-friendly error message.
     }
   };
 
@@ -105,7 +119,7 @@ const Checkout = () => {
   
       window.payhere.startPayment(payment);
       window.payhere.onCompleted = async (paymentData) => {
-        await createInvoice();
+        await createInvoice(payment);
       };
     } catch (error) {
       console.error("Fetch error:", error);

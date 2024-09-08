@@ -17,6 +17,7 @@ import { ThemeContextProvider } from './themecontext/ThemeContext';
 import { AuthProvider, AuthContext } from './contexts/AuthContext';
 import AuthRoute from './components/AuthRoute';
 import AdminRoute from './components/AdminRoute';
+import Invoice from './components/Invoice';
 import ProductPage from './components/ProductPage';
 
 // Admin Pages
@@ -67,6 +68,7 @@ const App = () => {
               <Route path="/wishlist" element={<AuthRoute component={Wishlist} />} />
               <Route path="/purchaseHistory" element={<AuthRoute component={PurchaseHistory} />} />
               <Route path="/profile" element={<AuthRoute component={Profile} />} />
+              <Route path="/invoice" element={<AuthRoute component={Invoice} />} />
 
               {/* Admin Dashboard */}
               <Route path="/admin/dashboard" element={<AdminRoute component={AdminDashboard} />} />

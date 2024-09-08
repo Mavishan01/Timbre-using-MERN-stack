@@ -1,11 +1,15 @@
 import React from 'react';
 import { Container, Grid, Typography, Button, Divider } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { useLocation } from 'react-router-dom';
 
 const Invoice = () => {
   const theme = useTheme();
+  const location = useLocation();
+  const { newObj } = location.state || {};
 
   const orderData = {
+    // Object containing all relevant order details
     invoiceNumber: '68a483e0d2a1e',
     date: '2024-07-27 08:35:24',
     customer: {
@@ -14,6 +18,7 @@ const Invoice = () => {
       email: 'hiranyagunaawardhane@gmail.com'
     },
     items: [
+      // Array of items in the order
       {
         id: 1,
         name: 'Yamaha Pacifica 112V Electric Guitar, Black',
@@ -27,10 +32,13 @@ const Invoice = () => {
         quantity: 1
       }
     ],
+    // Totals and charges
     subTotal: 80000.00,
     deliveryCharges: 500.00,
     grandTotal: 80500.00
   };
+  console.log("New Obj " + JSON.stringify(newObj))
+  console.log("New Obj " + newObj.InvoiceItems[0].qty)
 
   return (
     <Container
@@ -48,10 +56,9 @@ const Invoice = () => {
           <Typography variant="h4" sx={{ fontWeight: theme.typography.fontWeightBold, color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black, }}>
             Timbre
           </Typography>
-          <Typography>{'277/C, Main Rd, Piliyandala'}</Typography>
-          <Typography>{'Colombo'}</Typography>
-          <Typography>{'+94 71 445 4095 / +94 112 702 106'}</Typography>
-          <Typography>{'contact@timbre.com'}</Typography>
+          <Typography>{newObj.address}</Typography>
+          <Typography>{newObj.phone}</Typography>
+          <Typography>{newObj.email}</Typography>
         </Grid>
         <Grid item>
           <Button
@@ -77,15 +84,15 @@ const Invoice = () => {
       <Grid container justifyContent="space-between" sx={{ marginTop: theme.spacing(2) }}>
         <Grid item>
           <Typography variant="h6">Invoice #</Typography>
-          <Typography>{orderData.invoiceNumber}</Typography>
+          <Typography>{newObj.order_id}</Typography>
           <Typography variant="h6">Date & Time</Typography>
-          <Typography>{orderData.date}</Typography>
+          <Typography>{Date.now()}</Typography>
         </Grid>
         <Grid item>
           <Typography variant="h6">Bill To:</Typography>
-          <Typography>{orderData.customer.name}</Typography>
-          <Typography>{orderData.customer.address}</Typography>
-          <Typography>{orderData.customer.email}</Typography>
+          <Typography>{newObj.cus_name}</Typography>
+          <Typography>{newObj.cus_address}</Typography>
+          <Typography>{newObj.cus_email}</Typography>
         </Grid>
       </Grid>
 
@@ -96,7 +103,7 @@ const Invoice = () => {
         <Grid item xs={1}>
           <Typography>#</Typography>
         </Grid>
-        <Grid item xs={7}>
+        <Grid item xs={5}>
           <Typography>Order No & Item</Typography>
         </Grid>
         <Grid item xs={2}>
@@ -105,22 +112,28 @@ const Invoice = () => {
         <Grid item xs={2}>
           <Typography>Quantity</Typography>
         </Grid>
+        <Grid item xs={2}>
+          <Typography>Total</Typography>
+        </Grid>
       </Grid>
       <Divider sx={{ marginBottom: theme.spacing(1) }} />
 
-      {orderData.items.map((item, index) => (
+      {newObj.InvoiceItems.map((item, index) => (
         <Grid container key={item.id}>
           <Grid item xs={1}>
             <Typography>{index + 1}</Typography>
           </Grid>
-          <Grid item xs={7}>
-            <Typography>{item.name}</Typography>
+          <Grid item xs={5}>
+            <Typography>{item.product_id.title}</Typography>
           </Grid>
           <Grid item xs={2}>
-            <Typography>{`Rs. ${item.unitPrice.toFixed(2)}`}</Typography>
+            <Typography>{item.product_id.price}</Typography>
           </Grid>
           <Grid item xs={2}>
-            <Typography>{item.quantity}</Typography>
+            <Typography>{item.qty}</Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <Typography>{item.qty * item.product_id.price}</Typography>
           </Grid>
         </Grid>
       ))}
@@ -135,9 +148,9 @@ const Invoice = () => {
           <Typography sx={{ fontWeight: theme.typography.fontWeightBold }}>Grand Total</Typography>
         </Grid>
         <Grid item xs={2}>
-          <Typography>{`Rs. ${orderData.subTotal.toFixed(2)}`}</Typography>
-          <Typography>{`Rs. ${orderData.deliveryCharges.toFixed(2)}`}</Typography>
-          <Typography sx={{ fontWeight: theme.typography.fontWeightBold }}>{`Rs. ${orderData.grandTotal.toFixed(2)}`}</Typography>
+          <Typography>{newObj.total}</Typography>
+          <Typography>300</Typography>
+          <Typography sx={{ fontWeight: theme.typography.fontWeightBold }}>{newObj.total+300}</Typography>
         </Grid>
       </Grid>
 
