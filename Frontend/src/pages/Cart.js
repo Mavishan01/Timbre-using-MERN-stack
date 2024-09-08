@@ -8,8 +8,7 @@ const Cart = () => {
   const navigate = useNavigate();
 
   const initialCartItems = [
-    { id: 1, name: 'Acoustic Guitar', quantity: 1, price: 500, imageUrl: 'https://via.placeholder.com/100', selected: true },
-    { id: 2, name: 'Electric Guitar', quantity: 2, price: 800, imageUrl: 'https://via.placeholder.com/100', selected: true },
+    
   ];
 
   const [cartItems, setCartItems] = useState(initialCartItems);

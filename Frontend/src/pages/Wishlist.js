@@ -11,8 +11,7 @@ const WishlistPage = () => {
   const navigate = useNavigate();
 
   const initialWishlistItems = [
-    { id: 1, name: 'Classical Guitar', price: 600, imageUrl: 'https://via.placeholder.com/100' },
-    { id: 2, name: 'Bass Guitar', price: 900, imageUrl: 'https://via.placeholder.com/100' },
+    
   ];
   const [wishlistItems, setWishlistItems] = useState(initialWishlistItems);
 
