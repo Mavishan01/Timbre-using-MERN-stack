@@ -15,16 +15,24 @@ const saveInvoice = async (req, res) => {
         });
         const savedInvoice = await newInvoice.save({ session });
         const invoiceItems = items.map((item) => ({
+            product_id: item.product_id, 
             order_id: item.order_id,
             qty: item.qty,
             invoice_id: savedInvoice._id,
         }));
         await InvoiceItem.insertMany(invoiceItems, { session });
+
+        const invoice_Items = await InvoiceItem.find({ invoice_id: savedInvoice._id })
+        .populate('product_id',["title","price"])
+        .session(session);
+
+        console.log("Fetched Invoice Items after Insert:", invoice_Items);
+
         await session.commitTransaction();
         session.endSession();
         res
             .status(201)
-            .json({ message: "Invoice created successfully", invoice: savedInvoice });
+            .json({ message: "Invoice created successfully", invoice: savedInvoice, invoiceItems: invoice_Items });
     } catch (error) {
         await session.abortTransaction();
         session.endSession();
@@ -80,14 +88,14 @@ const updateDeliveryStatus = async (req, res) => {
 
 const getOrderCount = async (req, res) => {
     try {
-      const orderCount = await Invoice.countDocuments(); // Get total count
-      console.log('order count:', orderCount); 
-      res.status(200).json({ count: orderCount });
+        const orderCount = await Invoice.countDocuments(); // Get total count
+        console.log('order count:', orderCount);
+        res.status(200).json({ count: orderCount });
     } catch (error) {
-      console.error('Error getting order count:', error); // Log any error
-      res.status(500).json({ error: 'Error getting order count' });
+        console.error('Error getting order count:', error); // Log any error
+        res.status(500).json({ error: 'Error getting order count' });
     }
-  };
+};
 
 module.exports = {
     getAllInvoice,
