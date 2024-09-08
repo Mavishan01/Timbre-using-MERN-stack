@@ -135,7 +135,7 @@ const ProductPage = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        alert(data.message)
+        toast.success(data.message)
       })
       .catch((error) => {
         console.error('Error:', error.message);
@@ -161,7 +161,7 @@ const ProductPage = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        alert(data.message)
+        toast.success(data.message)
       })
       .catch((error) => {
         console.error('Error:', error.message);
@@ -169,6 +169,7 @@ const ProductPage = () => {
   }
 
   return (
+    <Box sx={{ paddingTop:3 }}>
     <Box sx={{ padding: 3, maxWidth: '1200px', marginLeft: 0 }}> {/* Align content to the left */}
       <Grid container spacing={4}>
         {/* Product Image Section */}
@@ -241,6 +242,7 @@ const ProductPage = () => {
           </Box>
         </Grid>
       </Grid>
+    </Box>
     </Box>
   );
 };

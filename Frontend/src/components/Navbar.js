@@ -101,6 +101,7 @@ const Navbar = () => {
           backgroundColor: darkMode ? "black" : "white",
           boxShadow: isScrolled ? "0px 4px 8px rgba(0, 0, 0, 0.1)" : "none", // Add shadow when scrolled
           transition: "box-shadow 0.3s ease-in-out", // Smooth transition
+          paddingBottom: 0
         }}
       >
         <Toolbar sx={{ height: "100px" }}>
@@ -187,7 +188,7 @@ const Navbar = () => {
             onClick={handleCartClick}
             sx={{ color: darkMode ? "white" : "black" }} // Dynamic color for dark mode
           >
-            <Badge badgeContent={4} color="error">
+            <Badge color="error">
               <ShoppingCartIcon />
             </Badge>
           </IconButton>

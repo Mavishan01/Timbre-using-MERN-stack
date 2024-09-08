@@ -8,6 +8,10 @@ const Invoice = () => {
   const location = useLocation();
   const { newObj } = location.state || {};
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   const orderData = {
     // Object containing all relevant order details
     invoiceNumber: '68a483e0d2a1e',
@@ -47,7 +51,14 @@ const Invoice = () => {
         padding: theme.spacing(4),
         backgroundColor: theme.palette.background.paper,
         borderRadius: theme.shape.borderRadius,
-        boxShadow: theme.shadows[3]
+        boxShadow: theme.shadows[3],
+        paddingTop:5,
+        '@media print': {
+          boxShadow: 'none', // Remove shadows in print
+          margin: 0,
+          padding: theme.spacing(1),
+        },
+
       }}
     >
       {/* Header */}
@@ -60,9 +71,10 @@ const Invoice = () => {
           <Typography>{newObj.phone}</Typography>
           <Typography>{newObj.email}</Typography>
         </Grid>
-        <Grid item>
+        <Grid item sx={{ '@media print': { display: 'none' } }}>
           <Button
             variant="contained"
+            onClick={handlePrint}
             sx={{
               fontWeight: theme.typography.fontWeightBold,
               padding: theme.spacing(1, 3),
@@ -73,7 +85,7 @@ const Invoice = () => {
               },
             }}
           >
-            Print or Save
+            Print
           </Button>
         </Grid>
       </Grid>
@@ -85,7 +97,7 @@ const Invoice = () => {
         <Grid item>
           <Typography variant="h6">Invoice #</Typography>
           <Typography>{newObj.order_id}</Typography>
-          <Typography variant="h6">Date & Time</Typography>
+          {/* <Typography variant="h6">Date & Time</Typography> */}
           <Typography>{Date.now()}</Typography>
         </Grid>
         <Grid item>
