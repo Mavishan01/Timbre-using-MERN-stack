@@ -143,14 +143,13 @@ const Invoice = () => {
       {/* Total Amount */}
       <Grid container justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
         <Grid item xs={4}>
-          <Typography>Sub Total</Typography>
-          <Typography>Delivery Charges</Typography>
+          
           <Typography sx={{ fontWeight: theme.typography.fontWeightBold }}>Grand Total</Typography>
         </Grid>
         <Grid item xs={2}>
-          <Typography>{newObj.total}</Typography>
-          <Typography>300</Typography>
-          <Typography sx={{ fontWeight: theme.typography.fontWeightBold }}>{newObj.total+300}</Typography>
+          
+          
+          <Typography sx={{ fontWeight: theme.typography.fontWeightBold }}>{newObj.total}</Typography>
         </Grid>
       </Grid>
 
