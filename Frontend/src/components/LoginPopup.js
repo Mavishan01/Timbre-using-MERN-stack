@@ -78,7 +78,7 @@ const LoginPopup = ({ open, handleClose }) => {
         handleClose(); // Close the popup after login
         // Redirect based on role
         if (isAdmin) {
-          navigate('/admin/dashboard'); // Redirect to admin dashboard
+          navigate('/admin/landing'); // Redirect to admin dashboard
         } else {
           navigate('/'); // Redirect to user dashboard or default page
         }
