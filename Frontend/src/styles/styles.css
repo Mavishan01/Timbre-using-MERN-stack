@@ -52,7 +52,7 @@
 
 .content {
     color: white;
-    background-color: #d32f2f;
+    background-color: #000000;
     height: 100%;
     padding: 30px;
     transition: 300ms;
@@ -61,7 +61,7 @@
 
 .content:hover,
 .content:active {
-    background-color: #b71c1c;
+    background-color: #303030;
 }
 
 .title {

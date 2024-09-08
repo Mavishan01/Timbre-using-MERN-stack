@@ -105,7 +105,7 @@ const Home = () => {
         ))}
       </Box>
       <Typography variant="h4" component="h2" gutterBottom sx={{ paddingBottom: '30px', paddingTop: '40px', fontWeight: 'bold' }}>
-        Most Rated Items
+        Top Rated Items
       </Typography>
       <Grid container spacing={4}>
         {mostRatedItems.map((item) => (

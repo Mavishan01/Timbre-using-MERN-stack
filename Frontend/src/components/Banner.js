@@ -1,18 +1,17 @@
 import React from 'react';
-import { Card, CardContent, CardMedia, Typography, Grid, Button } from '@mui/material';
+import { Card, CardContent, CardMedia, Typography, Grid } from '@mui/material';
 import '../styles/styles.css';
 
-const Banner = ({ item, contentPosition }) => {
+const Banner = ({ item, contentPosition, paragraphIndex }) => {
     const totalItems = item.Items.length + 1;
 
     const content = (
         <Grid item xs={4} key="content">
             <CardContent className="content">
-                <Typography className="title">{item.Name}</Typography>
-                <Typography className="caption">{item.Caption}</Typography>
-                <Button variant="outlined" className="view-button">
-                    View Now
-                </Button>
+                <Typography fontSize="50px" className="title" fontWeight="bold">{item.Name}</Typography>
+                <Typography fontSize="13px" className="paragraph" paddingTop={"100px"}>
+                    {item[`Paragraph${paragraphIndex}`] || `Default text for Paragraph ${paragraphIndex} if none provided.`}
+                </Typography>
             </CardContent>
         </Grid>
     );
