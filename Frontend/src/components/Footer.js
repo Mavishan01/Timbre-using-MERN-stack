@@ -37,8 +37,8 @@ const Footer = () => {
         <Link component={RouterLink} to="/about" color="inherit" sx={{ mx: 2 }}>
           About
         </Link>
-        <Link component={RouterLink} to="/get-in-touch" color="inherit" sx={{ mx: 2 }}>
-          Get in Touch
+        <Link component={RouterLink} to="/contact" color="inherit" sx={{ mx: 2 }}>
+          Give us feedback
         </Link>
       </Box>
     </Box>

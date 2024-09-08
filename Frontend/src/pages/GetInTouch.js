@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-const GetInTouch = () => {
+const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -41,7 +41,7 @@ const GetInTouch = () => {
       }}
     >
       <Typography variant="h4" gutterBottom align="center">
-        Get In Touch
+        Give us feedback
       </Typography>
       <TextField
         label="Name"
@@ -90,4 +90,4 @@ const GetInTouch = () => {
   );
 };
 
-export default GetInTouch;
+export default Contact;
