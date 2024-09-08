@@ -161,7 +161,7 @@ const Cart = () => {
                   <Grid container spacing={2} alignItems="center">
                     <Grid item xs={12} sm={6}>
                       <Typography variant="body1">{item.name}</Typography>
-                      <Typography variant="body1">Price: ${item.price}</Typography>
+                      <Typography variant="body1">Price: LKR {item.price}.00</Typography>
                     </Grid>
                     <Grid item xs={12} sm={6} container spacing={1} alignItems="center" justifyContent="flex-end">
                       <Grid item>
@@ -211,7 +211,7 @@ const Cart = () => {
         )}
         {cartItems.length > 0 && (
           <Box sx={{ mt: 2, textAlign: 'right' }}>
-            <Typography variant="h6">Total: ${calculateTotal()}</Typography>
+            <Typography variant="h6">Total: LKR {calculateTotal()}.00</Typography>
             <Button variant="contained" color="primary" sx={{ mt: 2 }} onClick={handleCheckout}>
               Proceed to Checkout
             </Button>

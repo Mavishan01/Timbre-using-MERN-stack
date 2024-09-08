@@ -63,7 +63,7 @@ const PurchaseHistory = () => {
                   Date: {order.createdAt}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Grand Total: Rs. {order.total}
+                  Grand Total: LKR {order.total}.00
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Delivery Status: {order.delivery_status_id.status}
@@ -87,7 +87,7 @@ const PurchaseHistory = () => {
                       {item.product_id?.title}
                     </Typography>
                     <Typography variant="body1">
-                      Rs. {item.product_id?.price}
+                      LKR {item.product_id?.price}.00
                     </Typography>
                     <Typography variant="body2">
                       Quantity: {item?.qty}
@@ -100,7 +100,7 @@ const PurchaseHistory = () => {
                       }}
                     >
                       <Typography variant="body1" sx={{ marginRight: 1 }}>
-                        Total: Rs. {item.product_id?.price}
+                        Total: LKR {item.product_id?.price}.00
                       </Typography>
                     </Box>
                   </Box>

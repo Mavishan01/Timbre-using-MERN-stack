@@ -105,7 +105,7 @@ const WishlistPage = () => {
                 </Grid>
                 <Grid item xs={8} sm={5} md={6}>
                   <Typography variant="body1">{item.name}</Typography>
-                  <Typography variant="body1">Price: ${item.price}</Typography>
+                  <Typography variant="body1">Price: LKR {item.price}.00</Typography>
                 </Grid>
                 <Grid item xs={12} sm={4} md={4} container justifyContent="flex-end" spacing={1}>
                   <Grid item>
