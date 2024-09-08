@@ -6,7 +6,6 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Box, Button } from "@mui/material";
-import Ratings from "./Ratings";
 import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import toast from "react-hot-toast";
@@ -110,7 +109,7 @@ export default function ProductCard({ item }) {
             <FavoriteIcon onClick={handleAddToWishlist} />
           </IconButton>
         </Box>
-        <Ratings value={item?.ratings} />
+        
       </CardContent>
       <Box
         sx={{
