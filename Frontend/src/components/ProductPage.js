@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button, IconButton, Grid, Card, CardMedia } from '@mui/material';
 import { AddShoppingCart, FavoriteBorder, Add, Remove } from '@mui/icons-material';
-import InstrumentImage from '../components/pexels-pixabay-39348.jpg'; // Use the existing image or replace with a new one
+// import InstrumentImage from '../components/pexels-pixabay-39348.jpg'; // Use the existing image or replace with a new one
 import { useLocation } from "react-router-dom";
 import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
 import { jwtDecode } from 'jwt-decode'
@@ -102,7 +102,7 @@ const ProductPage = () => {
       quantity: quantity,
       price: item.price,
       imageUrl: 'http://localhost:4000/products/' + item.img_card,
-    }]
+    }]
     navigate('/checkout', { state: { selectedItems } })
   }
 
