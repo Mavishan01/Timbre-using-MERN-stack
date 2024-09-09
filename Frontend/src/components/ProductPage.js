@@ -99,10 +99,10 @@ const ProductPage = () => {
       id: item._id,
       product_id: item._id,
       name: item.title,
-      quantity: item.quantity,
+      quantity: quantity,
       price: item.price,
       imageUrl: 'http://localhost:4000/products/' + item.img_card,
-    }]
+    }]
     navigate('/checkout', { state: { selectedItems } })
   }
 

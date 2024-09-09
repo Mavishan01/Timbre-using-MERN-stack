@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Invoice = require("../models/invoice");
 const InvoiceItem = require("../models/invoice_item");
+const Product = require("../models/product");
 
 const saveInvoice = async (req, res) => {
     const session = await mongoose.startSession();
@@ -15,16 +16,34 @@ const saveInvoice = async (req, res) => {
         });
         const savedInvoice = await newInvoice.save({ session });
         const invoiceItems = items.map((item) => ({
-            product_id: item.product_id, 
+            product_id: item.product_id,
             order_id: item.order_id,
             qty: item.qty,
             invoice_id: savedInvoice._id,
         }));
+
+        for (const item of items) {
+            const product = await Product.findById(item.product_id).session(session);
+            if (!product) {
+                res.status(500).json({
+                    message: " Product not found"
+                });
+            }
+            product.qty -= item.qty;
+            await Product.updateOne(
+                { _id: item.product_id }, 
+                { $inc: { quantity: -item.qty } }, 
+                { session }
+            );
+        }
+
         await InvoiceItem.insertMany(invoiceItems, { session });
 
+
+
         const invoice_Items = await InvoiceItem.find({ invoice_id: savedInvoice._id })
-        .populate('product_id',["title","price"])
-        .session(session);
+            .populate('product_id', ["title", "price"])
+            .session(session);
 
         console.log("Fetched Invoice Items after Insert:", invoice_Items);
 
@@ -39,10 +58,9 @@ const saveInvoice = async (req, res) => {
         console.error("Error saving invoice:", error);
         res
             .status(500)
-            .json({ message: "Failed to create invoice", error: error.message });
-    }
+            .json({ message: "Failed to create invoice", error: error.message });
+        }
 };
-
 const getAllInvoice = async (req, res) => {
     try {
         const invoices = await Invoice.find()
