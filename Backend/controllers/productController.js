@@ -183,11 +183,11 @@ const getProductsByBrands = async (req, res) => {
 
 const getProductCount = async (req, res) => {
     try {
-      const productCount = await Product.countDocuments(); 
+      const productCount = await Product.countDocuments(); // Get total count
       console.log('Product count:', productCount); 
       res.status(200).json({ count: productCount });
     } catch (error) {
-      console.error('Error getting product count:', error);
+      console.error('Error getting product count:', error); // Log any error
       res.status(500).json({ error: 'Error getting product count' });
     }
   };
