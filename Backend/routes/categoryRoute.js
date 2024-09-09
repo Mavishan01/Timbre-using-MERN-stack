@@ -13,7 +13,6 @@ const uploadCategoryImage = createUploadMiddleware("categories", "image");
 // Get all models
 router.get("/", getCategories);
 
-// POST a new workout
 router.post("/", uploadCategoryImage, createCategory);
 
 //Update

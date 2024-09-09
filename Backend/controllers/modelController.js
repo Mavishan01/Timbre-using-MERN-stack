@@ -1,20 +1,15 @@
 const { Mongoose } = require("mongoose");
 const Model = require("../models/model")
 
-// GET all Brands
-const getModels = async (req, res) => {
-    const models = await Model.find({}).sort({ createdAt: -1 }); // Give all the workout docs(decending order) in to array
-    // await: This keyword makes JavaScript wait until the database has finished fetching the workouts before moving on to the next line.
 
-    res.status(200).json(models); // sending that as json back to the brows other clients
-    // .json(Brands): This converts the workouts array into a JSON format (a way to represent data) and sends it back to the client.
+const getModels = async (req, res) => {
+    const models = await Model.find({}).sort({ createdAt: -1 }); 
+    res.status(200).json(models); 
 };
 
-// Create a Model
+
 const createModel = async (req, res) => {
     const { name } = req.body;
-
-    // add doc to db
     try {
       const model = await Model.create({ name });
       res.status(200).json(model);

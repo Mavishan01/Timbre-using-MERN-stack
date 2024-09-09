@@ -88,11 +88,11 @@ const updateDeliveryStatus = async (req, res) => {
 
 const getOrderCount = async (req, res) => {
     try {
-        const orderCount = await Invoice.countDocuments(); // Get total count
+        const orderCount = await Invoice.countDocuments(); 
         console.log('order count:', orderCount);
         res.status(200).json({ count: orderCount });
     } catch (error) {
-        console.error('Error getting order count:', error); // Log any error
+        console.error('Error getting order count:', error); 
         res.status(500).json({ error: 'Error getting order count' });
     }
 };

@@ -57,6 +57,7 @@ const getPurchaseHistory = async (req, res) => {
       });
     }
   };
+  
 module.exports = {
   getInvoiceItemSById,
   getPurchaseHistory

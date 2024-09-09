@@ -3,11 +3,8 @@ const Brand = require("../models/brand")
 
 // GET all Brands
 const getBrands = async (req, res) => {
-    const brands = await Brand.find({}).sort({ createdAt: -1 }); // Give all the workout docs(decending order) in to array
-    // await: This keyword makes JavaScript wait until the database has finished fetching the workouts before moving on to the next line.
-
-    res.status(200).json(brands); // sending that as json back to the brows other clients
-    // .json(Brands): This converts the workouts array into a JSON format (a way to represent data) and sends it back to the client.
+    const brands = await Brand.find({}).sort({ createdAt: -1 }); 
+    res.status(200).json(brands); 
 };
 
 // Create a Brand

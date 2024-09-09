@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 
 const orderSchema = new mongoose.Schema({
-    customer_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer' }, // assuming Customer is another model
-    product_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' }, // assuming Product is another model
+    customer_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer' }, 
+    product_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' }, 
     date: Date,
     item_count: Number,
     delivery_status: Number,

@@ -1,13 +1,9 @@
 const { Mongoose } = require("mongoose");
 const Category = require("../models/category");
 
-// GET all Categories
 const getCategories = async (req, res) => {
-  const categories = await Category.find({}).sort({ createdAt: -1 }); // Give all the workout docs(decending order) in to array
-  // await: This keyword makes JavaScript wait until the database has finished fetching the workouts before moving on to the next line.
-
-  res.status(200).json(categories); // sending that as json back to the brows other clients
-  // .json(Brands): This converts the workouts array into a JSON format (a way to represent data) and sends it back to the client.
+  const categories = await Category.find({}).sort({ createdAt: -1 }); 
+  res.status(200).json(categories);
 };
 
 // Create a Category
@@ -15,7 +11,6 @@ const createCategory = async (req, res) => {
   const { name } = req.body;
 
   const image = req.file.filename;
-  // add doc to db
   try {
     const existingCategory = await Category.findOne({ name });
     if (existingCategory) {

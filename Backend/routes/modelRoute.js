@@ -9,7 +9,6 @@ const Model = require("../models/model");
 // Get all models
 router.get("/", getModels);
 
-// POST a new workout
 router.post("/", createModel)
 
 //update

@@ -5,22 +5,13 @@ const Model = require("../models/model");
 const Color = require("../models/color");
 const Category = require("../models/category");
 
-// GET all Products
-// const getProducts = async (req, res) => {
-//     const products = await Product.find({}).sort({ createdAt: -1 }); // Give all the workout docs(decending order) in to array
-//     // await: This keyword makes JavaScript wait until the database has finished fetching the workouts before moving on to the next line.
-
-//     res.status(200).json(products); // sending that as json back to the brows other clients
-//     // .json(Brands): This converts the workouts array into a JSON format (a way to represent data) and sends it back to the client.
-// };
-
 const getProducts = async (req, res) => {
     try {
         const products = await Product.find({})
-            .populate("brand_id", "name") // Populating brand name
-            .populate("model_id", "name") // Populating model name
-            .populate("color_id", "name") // Populating color name
-            .populate("category_id", "name") // Populating category name
+            .populate("brand_id", "name")
+            .populate("model_id", "name")
+            .populate("color_id", "name") 
+            .populate("category_id", "name") 
             .sort({ createdAt: -1 });
 
         res.status(200).json(products);
@@ -36,7 +27,7 @@ const createProduct = async (req, res) => {
         const { title, description, category_id, price, quantity, color_id, ratings, brand_id, model_id } = req.body;
         console.log(req.file)
         const image = req.file.filename;
-        // Create a new product instance
+
         const newProduct = new Product({
             title,
             description,
@@ -51,10 +42,8 @@ const createProduct = async (req, res) => {
         });
 
         console.log(newProduct)
-        // Save the product to the database
         const savedProduct = await newProduct.save();
 
-        // Respond with the saved product
         res.status(200).json(savedProduct);
     } catch (error) {
         console.error('Error creating product:', error);
@@ -136,7 +125,7 @@ const getNewArrivals = async (req, res) => {
         const products = await Product.find()
             .populate('brand_id', 'name')
             .sort({ createdAt: -1 })
-            .limit(6);
+            .limit(12);
         if (!products) {
             res.status(400).json({ message: 'Products not found', error });
         }
@@ -194,11 +183,11 @@ const getProductsByBrands = async (req, res) => {
 
 const getProductCount = async (req, res) => {
     try {
-      const productCount = await Product.countDocuments(); // Get total count
+      const productCount = await Product.countDocuments(); 
       console.log('Product count:', productCount); 
       res.status(200).json({ count: productCount });
     } catch (error) {
-      console.error('Error getting product count:', error); // Log any error
+      console.error('Error getting product count:', error);
       res.status(500).json({ error: 'Error getting product count' });
     }
   };

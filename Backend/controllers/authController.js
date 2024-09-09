@@ -7,16 +7,11 @@ const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const customer = await Customer.findOne({ email });
+        const customer = await Customer.findOne({ email });         // Find the customer
 
         if (!customer) return res.status(400).json({ message: "Invalid credentials" });
 
-        console.log("Stored hashed password:", customer.password);
-        console.log("Password provided by user:", password);
-
         const isMatch = await bcrypt.compare(password, customer.password);
-
-        console.log("Password match result:", isMatch);
 
         if (!isMatch) return res.status(400).json({ message: "Invalid password credentials" });
 
@@ -38,10 +33,8 @@ const signupUser = async (req, res) => {
         const existingUser = await Customer.findOne({ email });
         if (existingUser) return res.status(400).json({ message: "User already exists" });
 
-        // Hash the password
         const hashedPassword = await bcrypt.hash(password, 12);
 
-        // Create a new customer
         const newCustomer = new Customer({
             first_name: fname,
             last_name: lname,
@@ -51,17 +44,14 @@ const signupUser = async (req, res) => {
             password: hashedPassword
         });
 
-        // Save the new customer to the database
         await newCustomer.save();
 
-        // Generate a JWT token
         const token = jwt.sign({ id: newCustomer._id, email: newCustomer.email, type: 'Customer' }, process.env.JWT_SECRET, { expiresIn: '1h' });
         res.cookie('user_id', newCustomer._id, { httpOnly: true, maxAge: 60 * 60 * 1000 });
 
-        // Return the customer data and token
         res.status(201).json({ customer: newCustomer, token, message: "Customer Signup Success", status: true });
     } catch (err) {
-        console.error("Signup error:", err); // Log any error that occurs
+        console.error("Signup error:", err); 
         res.status(500).json({ message: "Server error" });
     }
 };

@@ -9,7 +9,7 @@ const Brand = require("../models/brand");
 // Get all models
 router.get("/", getBrands);
 
-// POST a new workout
+
 router.post("/", createBrand)
 
 //update

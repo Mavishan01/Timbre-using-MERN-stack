@@ -4,7 +4,6 @@ const categorySchema = new mongoose.Schema({
     name: String,
     image: String,
     
-    // course_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Course'},
 },{timestamps:true})
 
 const Category = mongoose.model('Category', categorySchema)

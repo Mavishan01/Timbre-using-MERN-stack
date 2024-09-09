@@ -6,10 +6,9 @@ const { getColors,
         deleteColor } = require("../controllers/colorController");
 const Color = require("../models/color");
 
-// Get all models
 router.get("/", getColors);
 
-// POST a new workout
+
 router.post("/", createColor)
 
 //update
