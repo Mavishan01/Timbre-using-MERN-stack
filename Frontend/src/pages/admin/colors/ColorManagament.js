@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Button, TextField, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, Paper, IconButton } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
-import { ChromePicker } from 'react-color'; // Color picker library
+import { ChromePicker } from 'react-color';
 import AdminDashboard from '../../AdminDashboard';
 
 const ColorManagement = () => {
   const [colors, setColors] = useState([]);
   const [colorName, setColorName] = useState('');
-  const [colorHex, setColorHex] = useState('#000000'); // Default color
+  const [colorHex, setColorHex] = useState('#000000');
   const [editingIndex, setEditingIndex] = useState(null);
 
   useEffect(() => {
     const fetchColors = async () => {
       try {
-        const response = await fetch('/api/colors'); // Adjust the URL based on your backend routes
+        const response = await fetch('/api/colors');
         const data = await response.json();
         setColors(data);
       } catch (error) {
@@ -30,7 +30,6 @@ const ColorManagement = () => {
     if (editingIndex !== null) {
       const colorToUpdate = colors[editingIndex];
 
-      // Perform the update
       const response = await fetch(`/api/colors/update/${colorToUpdate._id}`, {
         method: 'PUT',
         headers: {
@@ -68,7 +67,7 @@ const ColorManagement = () => {
       }
     }
     setColorName('');
-    setColorHex('#000000'); // Reset to default
+    setColorHex('#000000');
   };
 
   const handleEditColor = (index) => {
@@ -82,7 +81,7 @@ const ColorManagement = () => {
     const colorToDelete = colors[index];
 
     try {
-      // Send DELETE request to the server
+
       const response = await fetch(`/api/colors/delete/${colorToDelete._id}`, {
         method: 'DELETE',
       });
@@ -91,7 +90,7 @@ const ColorManagement = () => {
         throw new Error('Error deleting color');
       }
 
-      // Remove color from local state if the deletion is successful
+
       setColors(colors.filter((_, i) => i !== index));
     } catch (error) {
       console.error('Error deleting color:', error);

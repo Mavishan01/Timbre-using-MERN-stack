@@ -12,6 +12,7 @@ import Orders from './admin/Orders';
 import CategoryManagement from './admin/categories/CategoryManagement'; // Updated import
 import BrandManagement from './admin/brands/BrandManagement'; // Updated import
 import ModelManagement from './admin/models/ModelManagement'; // Updated import
+import Enquiries from './admin/Enquiries';
 import Settings from './admin/Settings';
 
 const Sidebar = styled('div')(({ theme }) => ({
@@ -54,6 +55,9 @@ const AdminPage = () => {
           <ListItem component={Link} to="/admin/models" button>
             <ListItemText primary="Models" />
           </ListItem>
+          <ListItem component={Link} to="/admin/enquiries" button>
+            <ListItemText primary="Enquiries" />
+          </ListItem>
           <ListItem component={Link} to="/admin/settings" button>
             <ListItemText primary="Settings" />
           </ListItem>
@@ -73,6 +77,7 @@ const AdminPage = () => {
           <Route path="categories" element={<CategoryManagement />} /> {/* Updated route */}
           <Route path="brands" element={<BrandManagement />} /> {/* Updated route */}
           <Route path="models" element={<ModelManagement />} /> {/* Updated route */}
+          <Route path="enquiries" element={<Enquiries />} />
           <Route path="settings" element={<Settings />} />
         </Routes>
       </Box>

@@ -12,6 +12,7 @@ const Product = require("./models/product");
 const Category = require("./models/category");
 const Brand = require("./models/brand");
 const Model = require("./models/model");
+const Enquiry = require("./models/enquiry");
 const Customer = require("./models/customer");
 const Admin = require("./models/admin");
 const Cart = require("./models/cart");
@@ -25,6 +26,7 @@ const brandRoutes = require("./routes/brandRoute");
 const categoryRoutes = require("./routes/categoryRoute");
 const modelRoutes = require("./routes/modelRoute");
 const customerRoutes = require("./routes/customerRoute");
+const enquiryRoutes = require("./routes/enquiryRoute");
 const authRoutes = require("./routes/authRoute"); // Add auth routes
 const middlewareRoutes = require("./routes/middlewearRoute");
 const colorRoutes = require("./routes/colorRoute");
@@ -65,6 +67,7 @@ app.use("/api/brands", brandRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/models", modelRoutes);
 app.use("/api/customers", customerRoutes);
+app.use("/api/enquiries", enquiryRoutes);
 app.use("/api/auth", authRoutes); // Add the auth routes for handling login, signup, and admin login
 app.use("/api", middlewareRoutes);
 app.use("/api/colors", colorRoutes);

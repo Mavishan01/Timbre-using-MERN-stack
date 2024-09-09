@@ -8,9 +8,11 @@ const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    enquiry: "",
     contactNo: "",
+    enquiry: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionStatus, setSubmissionStatus] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,9 +22,38 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    setIsSubmitting(true);
+    setSubmissionStatus(null);
+
+    try {
+      console.log("sending");
+      const response = await fetch('/api/enquiries/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      setSubmissionStatus('Enquiry submitted successfully!');
+      setFormData({
+        name: "",
+        email: "",
+        contactNo: "",
+        enquiry: "",
+      });
+    } catch (error) {
+      setSubmissionStatus(`Error: ${error.message}`);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -83,9 +114,20 @@ const Contact = () => {
         multiline
         rows={4}
       />
-      <Button type="submit" variant="contained" color="primary" fullWidth>
-        Submit
+      <Button 
+        type="submit" 
+        variant="contained" 
+        color="primary" 
+        fullWidth
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? 'Submitting...' : 'Submit'}
       </Button>
+      {submissionStatus && (
+        <Typography variant="body1" color={submissionStatus.startsWith('Error') ? 'error' : 'success'} align="center" mt={2}>
+          {submissionStatus}
+        </Typography>
+      )}
     </Box>
   );
 };

@@ -19,6 +19,7 @@ import AuthRoute from './components/AuthRoute';
 import AdminRoute from './components/AdminRoute';
 import Invoice from './components/Invoice';
 import ProductPage from './components/ProductPage';
+import Enquiries from './pages/admin/Enquiries';
 
 // Admin Pages
 import Dashboard from './pages/admin/Dashboard';
@@ -81,6 +82,7 @@ const App = () => {
               <Route path="/admin/categories" element={<CategoryManagement />} />
               <Route path="/admin/brands" element={<BrandManagement />} />
               <Route path="/admin/models" element={<ModelManagement />} />
+              <Route path="admin/enquiries" element={<Enquiries/>} />
               <Route path="/admin/settings" element={<Settings />} />
             </Routes>
           </Box>
