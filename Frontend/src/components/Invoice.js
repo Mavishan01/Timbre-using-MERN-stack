@@ -41,8 +41,8 @@ const Invoice = () => {
     deliveryCharges: 500.00,
     grandTotal: 80500.00
   };
-  console.log("New Obj " + JSON.stringify(newObj))
-  console.log("New Obj " + newObj.InvoiceItems[0].qty)
+  // console.log("New Obj " + JSON.stringify(newObj))
+  // console.log("New Obj " + newObj.InvoiceItems[0].qty)
 
   return (
     <Container

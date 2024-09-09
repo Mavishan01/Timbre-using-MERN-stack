@@ -7,9 +7,7 @@ import { jwtDecode } from 'jwt-decode'
 const Cart = () => {
   const navigate = useNavigate();
 
-  const initialCartItems = [
-    
-  ];
+  const initialCartItems = [];
 
   const [cartItems, setCartItems] = useState(initialCartItems);
 

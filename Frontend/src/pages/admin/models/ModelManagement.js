@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography, Button, TextField, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, Paper, IconButton } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
 import AdminDashboard from '../../AdminDashboard';
+import toast from 'react-hot-toast';
 
 const ModelManagement = () => {
   const [models, setModels] = useState([]);
@@ -11,7 +12,7 @@ const ModelManagement = () => {
   useEffect(() => {
     const fetchModels = async () => {
       try {
-        const response = await fetch('/api/models'); // Adjust the URL based on your backend routes
+        const response = await fetch('/api/models');
         const data = await response.json();
         setModels(data);
       } catch (error) {
@@ -23,6 +24,11 @@ const ModelManagement = () => {
   }, []);
 
   const handleAddModel = async () => {
+    if (!modelName) {
+      toast.error('Model name cannot be empty');
+      return;
+    }
+
     const modelData = { name: modelName};
 
     if (editingIndex !== null) {
@@ -89,7 +95,6 @@ const ModelManagement = () => {
         throw new Error('Error deleting brand');
       }
 
-      // Remove category from local state if the deletion is successful
       setModels(models.filter((_, i) => i !== index));
     } catch (error) {
     console.error('Error deleting model:', error);

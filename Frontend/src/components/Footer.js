@@ -21,7 +21,7 @@ const Footer = () => {
           Contact Us
         </Typography>
         <Typography variant="body1" component="div">
-          Shop Name
+          Timbre
         </Typography>
         <Typography variant="body1" component="div">
           Address: 123 Music Lane, Melody City, 56789
@@ -30,16 +30,16 @@ const Footer = () => {
           Phone: (123) 456-7890
         </Typography>
         <Typography variant="body1" component="div">
-          Email: info@musicshop.com
+          Email: timbre@musicshop.com
         </Typography>
       </Box>
       <Box>
         <Link component={RouterLink} to="/about" color="inherit" sx={{ mx: 2 }}>
           About
         </Link>
-        <Link component={RouterLink} to="/contact" color="inherit" sx={{ mx: 2 }}>
+        {/* <Link component={RouterLink} to="/contact" color="inherit" sx={{ mx: 2 }}>
           Give us feedback
-        </Link>
+        </Link> */}
       </Box>
     </Box>
   );
