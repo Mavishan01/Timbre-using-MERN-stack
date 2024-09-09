@@ -12,9 +12,9 @@ import { ThemeContext } from "../themecontext/ThemeContext";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import LoginPopup from "./LoginPopup";
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
+// import Box from '@mui/material/Box';
+// import TextField from '@mui/material/TextField';
+// import Autocomplete from '@mui/material/Autocomplete';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import HistoryIcon from '@mui/icons-material/History';
 import toast from 'react-hot-toast';
@@ -119,7 +119,7 @@ const Navbar = () => {
           >
             Timbre
           </Typography>
-          <Autocomplete
+          {/* <Autocomplete
             id="country-select-demo"
             sx={{ width: 300 }}
             options={products}
@@ -159,7 +159,7 @@ const Navbar = () => {
                 }}
               />
             )}
-          />
+          /> */}
           <Button
             color="inherit"
             sx={{
