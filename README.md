@@ -33,7 +33,7 @@ A full-featured e-commerce web application for musical instruments, built using 
 - **Version Control:** Git
 - **Payment Integration:** [Add payment provider used, e.g., Stripe, PayPal]
 
-npm install
+
 
 
 
